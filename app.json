@@ -5,12 +5,16 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "auto",
+    "scheme": "com.groovetech.comot_yamayama",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/bottles-anim.gif",
+      "resizeMode": "cover",
+      "backgroundColor": "#25292e"
     },
+    "assets": [
+      "./assets/Fonts/"
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -18,9 +22,12 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "iosDisplaysInForeground": true,
+      "bundleIdentifier": "com.groovetech.comot_yamayama"
     },
     "android": {
+      "package": "com.groovetech.comot_yamayama",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -28,6 +35,9 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      "expo-build-properties"
+    ]
   }
 }
