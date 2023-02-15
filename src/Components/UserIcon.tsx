@@ -9,7 +9,7 @@ const UserIcon = ({ type }: any) => {
   let letter = userData?.fullName.split(" ");
 
   letter?.forEach(item => letter = [...letter, item.charAt(0)])
-  const chars = letter[3] + letter[4];
+  const chars = letter[2] + letter[3];
 
   return (
     <>
@@ -24,13 +24,14 @@ const UserIcon = ({ type }: any) => {
         style={{
           borderRadius: 150,
           backgroundColor: "green",
-          width: 60,
+          width: 38,
+          marginLeft: 10,
           aspectRatio: 1,
           alignItems: "center",
           justifyContent: "center",
         }}
       >
-        <Text style={{ color: "#fff", fontWeight: "600", fontSize: 23 }}>
+        <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16 }}>
           {chars || ""}
         </Text>
       </View>
@@ -43,7 +44,7 @@ export default UserIcon;
 
 const styles = StyleSheet.create({
   profileImage: {
-    width: 30,
+    width: 20,
     aspectRatio: 1,
     alignSelf: "center",
     borderRadius: 100,

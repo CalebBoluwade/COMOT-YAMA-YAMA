@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { serverData } from "../../utils/schemas/Types";
+import { registerData, serverData } from "../../utils/schemas/Types";
 import axiosBaseQuery from "./API";
 const tempUrl = "http://192.168.0.106:1732/api/v1";
 
@@ -9,7 +9,7 @@ export const UserAuthApi = createApi({
     baseUrl: tempUrl,
   }),
   endpoints: (builder) => ({
-    login: builder.mutation({
+    login: builder.mutation<any, any>({
       query: (payload) => ({
         url: "/login",
         method: "POST",
@@ -19,9 +19,9 @@ export const UserAuthApi = createApi({
         params: null,
       }),
     }),
-    register: builder.mutation({
+    register: builder.mutation<any, any>({
       query: (payload) => ({
-        url: "/register",
+        url: "/join",
         token: "",
         method: "POST",
         data: "",
@@ -39,7 +39,7 @@ export const UserAuthApi = createApi({
         params: null,
       }),
     }),
-    validateRefCode: builder.mutation({
+    validateRefCode: builder.mutation<any, { ref: string }>({
       query: (payload) => ({
         url: "/validate/referral",
         token: "",
@@ -62,5 +62,10 @@ export const UserAuthApi = createApi({
   }),
 });
 
-export const { useLoginMutation, useRegisterMutation, useServerStatusQuery } =
-UserAuthApi;
+export const {
+  useLoginMutation,
+  useRegisterMutation,
+  useGenerateRefCodeMutation,
+  useValidateRefCodeMutation,
+  useServerStatusQuery,
+} = UserAuthApi;

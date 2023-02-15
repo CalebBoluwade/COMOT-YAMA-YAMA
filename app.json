@@ -1,20 +1,17 @@
 {
   "expo": {
-    "name": "COMOT-YMA_YAA",
+    "name": "COMOT YAMA YAMA",
     "slug": "COMOT-YMA_YAA",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "auto",
-    "scheme": "com.groovetech.comot_yamayama",
+    "userInterfaceStyle": "automatic",
+    "scheme": "com.groovetech.comotyamayama",
     "splash": {
-      "image": "./assets/bottles-anim.gif",
-      "resizeMode": "cover",
+      "image": "./assets/Recycling.png",
+      "resizeMode": "contain",
       "backgroundColor": "#25292e"
     },
-    "assets": [
-      "./assets/Fonts/"
-    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -23,11 +20,11 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "iosDisplaysInForeground": true,
-      "bundleIdentifier": "com.groovetech.comot_yamayama"
+      "bundleIdentifier": "com.groovetech.comotyamayama"
     },
     "android": {
-      "package": "com.groovetech.comot_yamayama",
+      "package": "com.groovetech.comotyamayama",
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
@@ -37,7 +34,19 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-build-properties"
-    ]
+      "expo-build-properties",
+      [
+      "expo-image-picker",
+      {
+        "photosPermission": "The app accesses selected photo to share with PSP vendor.",
+        "cameraPermission" : "Allow COMOT YAMA YAMA to access your camera"
+      }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "fd236a7d-fe1f-4612-86e9-bda196f44f62"
+      }
+    }
   }
 }

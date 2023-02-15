@@ -2,28 +2,15 @@ import { StyleSheet, Text, View, TouchableOpacity, FlatList } from "react-native
 import React from "react";
 import PaletteStyles from "../Style/AppPalette";
 import { TranactionStatus, TranactionType, Transaction } from "../Utils/Schemas/Types";
-import { color } from "react-native-elements/dist/helpers";
+import GoBack from "../Components/GoBack";
+import { RootState } from "../Context/Store";
+import { useSelector } from "react-redux";
+import { useFetchTransactionsQuery } from "../Context/API/Transactions";
 
 const History = ({navigation}: any) => {
-    const TransactionTestData: Transaction[] = [{
-        id: "daadcfs-14kcwerd-scjow",
-        amount: 3600,
-        description: "PAYMENT FOR FEBUARY WASTE DISPOSAL",
-        status: TranactionStatus.SUCCESSFUL,
-        type: TranactionType.DEBIT,
-        transDate: Date.now().toLocaleString(),
-        CRacctName: "GROOVE TECH LTD.",
-        CRacctNo: "6002215686"
-    }, {
-        id: "zpagifs-gefwr63-scjow",
-        amount: 950,
-        description: "PAYMENT FOR RECYCLING PLASTC BOTTLES x 25 @ N40",
-        status: TranactionStatus.SUCCESSFUL,
-        type: TranactionType.CREDIT,
-        transDate: Date.now().toLocaleString(),
-        CRacctName: "JOHN DOE",
-        CRacctNo: "XXXXXXXXX"
-    }]
+
+    const { transaction } = useSelector((state: RootState) => state.Transactions);
+    // const { data, isLoading } = useFetchTransactionsQuery({});
 
     const renderTransactionItems = ({item}: any) => {
         return (
@@ -39,13 +26,32 @@ const History = ({navigation}: any) => {
     };
 
   return (
-    <View style={PaletteStyles.container}>
-      <Text style={PaletteStyles.lgTextBold}>Transactions</Text>
+    <View
+    style={[
+      PaletteStyles.container,
+      {
+        backgroundColor: PaletteStyles.darkMode.backgroundColor,
+        padding: 18,
+      },
+    ]}
+  >
+    <View
+        style={{
+          flexDirection: "row",
+        //   padding: PaletteStyles.vSpacing.marginVertical,
+        }}
+      >
+        <GoBack navigation={navigation} />
 
-      <Text style={PaletteStyles.lgTextLight}>Find all recent transactions done within the last 6 months</Text>
+        <View>
+          <Text style={PaletteStyles.lgTextBold}>Transactions</Text>
+          <Text style={PaletteStyles.lgTextLight}>Find all recent transactions.</Text>
+        </View>
+      </View>
+
       <View style={PaletteStyles.viewBox}></View>
 
-      <FlatList data={TransactionTestData} renderItem={renderTransactionItems} />
+      <FlatList data={transaction} renderItem={renderTransactionItems} />
     </View>
   );
 };
@@ -55,6 +61,7 @@ export default History;
 const styles = StyleSheet.create({
     TransactionView: {
         // margin: PaletteStyles.vSpacing.marginVertical,
+        backgroundColor: PaletteStyles.darkMode.color,
         borderTopWidth: 1,
         borderBottomWidth: 1,
         paddingVertical: PaletteStyles.vSpacing.paddingVertical,

@@ -13,22 +13,21 @@ import {
 import React, { useState } from "react";
 import { Icon } from "react-native-elements";
 import { useLoginMutation } from "../../Context/API/AUTH_API";
-import { LoginUser as Loginn } from "../../Context/Auth";
-import { Active, Inactive } from "../../Context/Server";
+import { LoginUser as Loginn } from "../../Context/Data/Auth";
+import { Active, Inactive } from "../../Context/Data/Server";
 import PaletteStyles from "../../Style/AppPalette";
 import { useDispatch } from "react-redux";
-import Response from "../../Components/Response";
 
 const Login = () => {
   const [LoginUser, { isLoading }] = useLoginMutation();
-  const [email, setEmail] = useState<string>();
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>();
 
   const Dispatch = useDispatch();
 
   const UserLogin = () => {
     LoginUser({
-      email: email,
+      email: email.toLowerCase(),
       password: password,
     })
       .unwrap()
@@ -37,7 +36,8 @@ const Login = () => {
         Dispatch(Active({ message: "Login Sucessful" }));
       })
       .catch((err) => {
-        Dispatch(Inactive({ message: err?.data?.message }));
+        // console.log(err)
+        Dispatch(Inactive({ message: err?.data[0]?.message || err.data || "Server error" }));
       });
   };
 
@@ -62,18 +62,14 @@ const Login = () => {
         enabled
         style={[
           {
-            // flexDirection: "row",
             paddingTop: 35,
             padding: 21,
             backgroundColor: PaletteStyles.darkMode.backgroundColor,
-
-            // alignItems: "center",
-            // justifyContent: "space-around",
           },
         ]}
       >
         <View style={{ paddingTop: 15, padding: 12 }}>
-          <Text style={[PaletteStyles.lgTextBoldx2]}>Login</Text>
+          <Text style={[PaletteStyles.lgTextBoldx2]}>LOGIN</Text>
           <Text
             style={[
               PaletteStyles.lgTextLight,
@@ -89,7 +85,7 @@ const Login = () => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
             borderRadius: 15,
             marginVertical: 12,
           }}
@@ -107,7 +103,6 @@ const Login = () => {
             autoCorrect={false}
             keyboardType="email-address"
             style={PaletteStyles.inputField}
-            defaultValue="x@y"
             placeholder="email-address"
             onChangeText={(text) => setEmail(text)}
           />
@@ -118,7 +113,7 @@ const Login = () => {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            backgroundColor: "rgba(255, 255, 255, 0.5)",
             borderRadius: 15,
           }}
         >
@@ -130,23 +125,33 @@ const Login = () => {
             style={{ marginLeft: 4 }}
           />
           <TextInput
-            keyboardType="visible-password"
+            keyboardType="default"
             style={PaletteStyles.inputField}
             secureTextEntry
-            defaultValue="TestPass!3"
             placeholder="password"
             onChangeText={(text) => setPassword(text)}
           />
         </View>
         <TouchableOpacity
-          style={[PaletteStyles.button, { marginTop: 25, minWidth: "80%" }]}
-          onPress={() => UserLogin()}
+          style={[
+            PaletteStyles.button,
+            {
+              width: "70%",
+              alignSelf: "center",
+              marginTop: PaletteStyles.vSpacing.marginVertical + 10,
+            },
+          ]}
+          onPress={() =>  UserLogin()}
         >
           {isLoading ? (
             <ActivityIndicator />
           ) : (
-            <Text style={PaletteStyles.smMain}>Log in</Text>
-          )}
+          <Text
+            style={[
+              PaletteStyles.lgTextBold,
+              { color: PaletteStyles.colorScheme1.color, textAlign: "center" },
+            ]}
+          >Log in</Text>  )}
         </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
@@ -156,5 +161,5 @@ const Login = () => {
 export default Login;
 
 const styles = StyleSheet.create({
-  container: { justifyContent: "space-evenly" },
+  container: { flex: 1, justifyContent: "space-evenly" },
 });

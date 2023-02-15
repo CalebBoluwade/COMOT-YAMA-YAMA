@@ -1,14 +1,25 @@
-import { StyleSheet, Text, View, AppState, SafeAreaView } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  AppState,
+  TouchableOpacity,
+  Animated,
+  FlatList,
+  Image,
+  ScrollView
+} from "react-native";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LogOutUser } from "../Context/Auth";
+import { LogOutUser } from "../Context/Data/Auth";
 import { RootState } from "../Context/Store";
 import PaletteStyles from "../Style/AppPalette";
 import { useServerStatusQuery } from "../Context/API/AUTH_API";
-import { initData } from "../Context/Server";
+import { initData } from "../Context/Data/Server";
 import UserIcon from "../Components/UserIcon";
+import { Icon } from "react-native-elements";
 
-const Initial = () => {
+const Initial = ({ navigation }: any) => {
   const appState = useRef(AppState.currentState);
   const [idleTime, setIdleTime] = useState(0);
 
@@ -48,28 +59,215 @@ const Initial = () => {
   //     subscription.remove();
   //   };
   // });
+  const imageArray = [
+    {
+      id: 1,
+      img: require("../../assets/shake.png"),
+    },
+    {
+      id: 2,
+      img: require("../../assets/Hello.png"),
+    },
+  ];
+
+  const renderBoardSlides = ({ item, index }: any) => {
+    return (
+      <View style={styles.slides}>
+        <Image source={item.img} style={styles.image} resizeMode="contain" />
+      </View>
+    );
+  };
+
+  // const completedOnboarding = async () => {
+  //   await AsyncStorage.setItem("onboarded", JSON.stringify(true)).then(() => {
+  //     setOpenModal(false);
+
+  //     if (Platform.OS === "android") {
+  //       showToast("Completed");
+  //     } else {
+  //       alert("Completed");
+  //     }
+  //   });
+  // };
 
   return (
-    <SafeAreaView style={PaletteStyles.container}>
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-      <UserIcon />
-        <View style={{paddingLeft: 5}}>
-          <Text style={PaletteStyles.lgTextBold}>{userData?.fullName}</Text>
-          <Text style={PaletteStyles.smTextLight}>{userData?.userType}</Text>
+    <View style={[PaletteStyles.container, { backgroundColor: "#3f86cf4f" }]}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: PaletteStyles.hSpacing.paddingHorizontal,
+        }}
+      >
+        {/* <UserIcon /> */}
+        <View style={{ paddingLeft: 5 }}>
+          <Text style={[PaletteStyles.lgTextBold, { color: "#FFF" }]}>
+            {userData?.fullName}
+          </Text>
+          <Text style={PaletteStyles.colorScheme1}>{userData?.userType}</Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            padding: PaletteStyles.hSpacing.paddingHorizontal,
+          }}
+        >
+          <Icon
+            name="notifications-outline"
+            type="ionicon"
+            size={25}
+            style={{ marginLeft: 25 }}
+          />
+          <UserIcon />
         </View>
       </View>
 
-      <View style={PaletteStyles.viewBox}>
-        <Text>Quick To Do's</Text>
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+        style={[
+          PaletteStyles.styleContainer,
+          { backgroundColor: PaletteStyles.darkMode.backgroundColor },
+        ]}
+      >
+        <Animated.View style={{ height: 265 }}>
+          <FlatList
+            data={imageArray}
+            renderItem={(item) => renderBoardSlides(item)}
+            horizontal
+            snapToAlignment="center"
+            showsHorizontalScrollIndicator={false}
+            pagingEnabled
+            // bounces={true}
+            // onEndReached={() => {}}
+            // onScroll={Animated.event(
+            //   [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+            //   { useNativeDriver: false }
+            // )}
+            // keyExtractor={(item) => item.id}
+            scrollEventThrottle={32}
+            // onViewableItemsChanged={viewItemsChanged}
+            // viewabilityConfig={viewConfig}
+            // ref={slidesRef}
+          />
+        </Animated.View>
 
-        <Text>Dispose Waste</Text>
+        <Text style={[PaletteStyles.lgTextBold, { padding: 10 }]}>
+          Quick To Do's
+        </Text>
 
-        
-      </View>
-    </SafeAreaView>
+        <View style={PaletteStyles.gridLayout}>
+          <TouchableOpacity
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox,
+            ]}
+            onPress={
+              userData.userType === "USER"
+                ? () =>
+                    navigation.navigate("Stack", {
+                      screen: "DisposeRecycle",
+                    })
+                : () => {}
+            }
+          >
+            <Icon
+              name={
+                userData.userType === "USER"
+                  ? "delete-empty-outline"
+                  : "truck-delivery-outline"
+              }
+              size={25}
+              raised
+              type="material-community"
+              color={PaletteStyles.colorScheme1.color}
+            />
+            <Text style={{ color: PaletteStyles.darkMode.color }}>
+              {userData.userType === "USER"
+                ? "DISPOSE"
+                : "VIEW PENDING PICKUPS"}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox,
+            ]}
+          >
+            <Icon
+              name="recycle"
+              raised
+              size={25}
+              type="font-awesome"
+              color={PaletteStyles.colorScheme1.color}
+              // style={{ marginLeft: 4 }}
+            />
+            <Text style={{ color: PaletteStyles.darkMode.color }}>RECYCLE</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox,
+            ]}
+          >
+            <Icon
+              name="calendar-outline"
+              size={25}
+              raised
+              type="ionicon"
+              color={PaletteStyles.colorScheme1.color}
+            />
+            <Text style={{ color: PaletteStyles.darkMode.color }}>
+              VIEW SCHEDULE
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox,
+            ]}
+            onPress={() => navigation.navigate("Receipts")}
+          >
+            <Icon
+              name="receipt-outline"
+              size={25}
+              raised
+              type="ionicon"
+              color={PaletteStyles.colorScheme1.color}
+            />
+            <Text style={{ color: PaletteStyles.darkMode.color }}>
+              TRANSACTION HISTORY
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
 export default Initial;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    width: "90%",
+    height: 265,
+    alignSelf: "center",
+  },
+
+  slides: {
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center",
+    width: PaletteStyles.Width.width,
+    height: 265,
+  },
+});

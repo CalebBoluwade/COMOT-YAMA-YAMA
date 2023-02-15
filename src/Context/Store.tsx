@@ -4,14 +4,18 @@ import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, 
 import storage from "redux-persist/lib/storage";
 import { UserAuthApi } from "./API/AUTH_API";
 // import { statusAPI } from "./API/ServerStatus";
-import Auth from "./Auth";
-import Server from "./Server";
+import Auth from "./Data/Auth";
+import Server from "./Data/Server";
 import thunk from "redux-thunk";
+import { TransactionsAPI } from "./API/Transactions";
+import Transactions from "./Data/Transactions";
 
 const rootReducer = combineReducers({
     UserData: Auth,
-    Server: Server, 
+    Server: Server,
+    Transactions: Transactions, 
   [UserAuthApi.reducerPath]: UserAuthApi.reducer,
+  [TransactionsAPI.reducerPath]: TransactionsAPI.reducer,
   // [statusAPI.reducerPath]: statusAPI.reducer
 })
 
@@ -28,7 +32,7 @@ export const Store = configureStore({
 				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
 			},
 		}
-    ).concat(UserAuthApi.middleware)
+    ).concat(UserAuthApi.middleware).concat(TransactionsAPI.middleware)
 });
 
 setupListeners(Store.dispatch);

@@ -21,6 +21,15 @@ interface API {
     },
   }
 
+  interface registerData {
+    "fullName": string;
+    "email": string;
+    "password": string,
+    "userType": string,
+    "refCode": string;
+    "phoneNumber": string;
+  }
+
   enum TranactionType {
     "CREDIT" = "CREDIT",
     "DEBIT" = "DEBIT"
@@ -35,6 +44,7 @@ interface API {
   interface Transaction {
     id: string;
     amount: number;
+    email: string;
     description: string;
     status: TranactionStatus;
     type: TranactionType;
@@ -43,4 +53,4 @@ interface API {
     CRacctNo: string;
   }
 
-export { API, InitData, serverData, Transaction, TranactionStatus, TranactionType }
+export { API, InitData, serverData, registerData, Transaction, TranactionStatus, TranactionType }

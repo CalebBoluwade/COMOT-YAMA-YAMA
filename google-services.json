@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "429706038799",
+    "project_id": "comot-yama-yama",
+    "storage_bucket": "comot-yama-yama.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429706038799:android:b7e3cb2842c4ecd44bdd7a",
+        "android_client_info": {
+          "package_name": "com.groovetech.comotyamayama"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "429706038799-dvlo844sllnpcqb6h7pesrq5c7mbkk7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARwk8fNFtc3D-qHecQamjUBMeI0pI5itU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429706038799-dvlo844sllnpcqb6h7pesrq5c7mbkk7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

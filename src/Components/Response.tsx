@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Context/Store";
 import { Icon } from "react-native-elements";
 import PaletteStyles from "../Style/AppPalette";
-import { _NULS } from "../Context/Server";
+import { _NULS } from "../Context/Data/Server";
 
 const Response = () => {
   const { status } = useSelector((state: RootState) => state.Server);
@@ -16,6 +16,8 @@ const Response = () => {
       Dispatch(_NULS());
     }, 3000);
   // }, []);
+
+  // console.log(status)
 
   return (
     <>

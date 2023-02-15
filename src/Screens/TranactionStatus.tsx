@@ -13,7 +13,7 @@ const TranactionStatus = ({ route, navigation }: any) => {
 
   let x = 1;
   return (
-    <ScrollView style={PaletteStyles.container}>
+    <View style={PaletteStyles.container}>
       <Text style={PaletteStyles.lgTextBold}>Transaction Receipt</Text>
 
       <View style={{ alignSelf: "center", margin: 25 }}>
@@ -99,7 +99,7 @@ const TranactionStatus = ({ route, navigation }: any) => {
           </Text>
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 

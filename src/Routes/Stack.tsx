@@ -3,13 +3,23 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Platform } from "react-native";
-import { ProfileQR, Referral, TranactionStatus } from "../Screens/index";
+import UserLocation from "../Components/UserLocation";
+import {
+  DisposeRecycle,
+  Maps,
+  ProfileQR,
+  Referral,
+  TranactionStatus,
+  VendorList,
+} from "../Screens/index";
 
 const Stack = createStackNavigator();
 
 const StackNav = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="VendorList" component={VendorList} />
+
       <Stack.Group
         screenOptions={{
           presentation: "modal",
@@ -21,19 +31,21 @@ const StackNav = () => {
             component={Referral}
             options={{ presentation: "modal" }}
           /> */}
+        <Stack.Screen name="Referral2" component={Referral} />
+
         <Stack.Screen
-          name="Referral2"
-          component={Referral}
-          // options={{
-          //   presentation: "card",
-          // }}
+          name="DisposeRecycle"
+          component={DisposeRecycle}
+          options={{
+            presentation: "modal",
+          }}
         />
 
-<Stack.Screen
-          name="Referral2"
-          component={Referral}
+        <Stack.Screen
+          name="UserLocation"
+          component={Maps}
           // options={{
-          //   presentation: "card",
+          //   presentation: "modal",
           // }}
         />
 
@@ -42,11 +54,11 @@ const StackNav = () => {
           component={TranactionStatus}
           options={{
             presentation: "modal",
-            cardStyle: {
-              elevation: 3,
-              // backgroundColor:
-              //   Platform.OS === "ios" ? "transparent" : "rgba(0, 0, 0, 0)",
-            },
+            // cardStyle: {
+            //   elevation: 3,
+            //   // backgroundColor:
+            //   //   Platform.OS === "ios" ? "transparent" : "rgba(0, 0, 0, 0)",
+            // },
           }}
         />
         <Stack.Screen name="ProfileQR" component={ProfileQR} />

@@ -1,5 +1,5 @@
 import { StyleSheet, Appearance, Dimensions } from "react-native";
-const darkMode = Appearance.getColorScheme() === "dark";
+export const darkMode = Appearance.getColorScheme() === "dark";
 
 let { width, height } = Dimensions.get("screen");
 
@@ -18,7 +18,7 @@ const PaletteStyles = StyleSheet.create({
 
   darkMode: {
     color: darkMode ? "#FFF" : "#000",
-    backgroundColor: darkMode ? "#000" : "#FFF"
+    backgroundColor: darkMode ? "#000" : "#FFF",
   },
 
   HeaderFont: {
@@ -27,24 +27,52 @@ const PaletteStyles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 35,
-    paddingHorizontal: 18,
+    // paddingHorizontal: 18,
   },
   styleContainer: {
-    borderTopLeftRadius: 25,
-    borderTopEndRadius: 25,
-    borderTopWidth: 2,
-    borderColor: "green"
-  },
-  viewBox: {
-    marginVertical: 12,
-    borderRadius: 30,
-    shadowOpacity: 0.21,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    backgroundColor: "#FFF",
+    padding: 18,
+    flex: 3,
     shadowOffset: {
       width: 14,
       height: -13,
     },
+    shadowColor: darkMode ? "#FFF" : "#000",
+    marginTop: 15,
+    overflow: "scroll"
+  },
+
+  gridLayout: {
+    flexWrap: "wrap",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    // marginVertical: 8
+  },
+  gridBox: {
+    width: "45%",
+    borderRadius: 7,
+    padding: 18,
+    // backgroundColor: "#3f86cf4f",
+    // shadowOpacity: 0.21,
+    // shadowOffset: {
+    //   width: 14,
+    //   height: -13,
+    // },
+  },
+  viewBox: {
+    marginVertical: 8,
+    borderRadius: 10,
+    shadowOpacity: 0.21,
+    alignItems: "center",
+    shadowColor: darkMode ? "#FFF" : "#000",
+    shadowOffset: {
+      width: -14,
+      height: 13,
+    },
     borderWidth: 2,
-    marginBottom: 15
+    marginBottom: 15,
   },
   lgTextBoldx2: {
     fontSize: 30,
@@ -57,6 +85,7 @@ const PaletteStyles = StyleSheet.create({
     fontWeight: "900",
     letterSpacing: 1,
     color: darkMode ? "#FFF" : "#000",
+    fontFamily: "Poppins-Bold"
   },
   smTextBold: {
     fontSize: 16,
@@ -65,17 +94,17 @@ const PaletteStyles = StyleSheet.create({
     color: darkMode ? "#FFF" : "#000",
   },
   lgTextLight: {
-    fontSize: 21,
+    fontSize: 20,
     fontWeight: "400",
-    color: "#777"
+    color: "#777",
   },
   smTextLight: {
     fontSize: 14,
     fontWeight: "400",
-    color: "#777"
+    color: "#777",
   },
   main: {
-    color: "#FFFFFF",
+    color: darkMode ? "#FFF" : "#000",
     fontSize: 21,
     // fontFamily: "Poppins-SemiBold",
     letterSpacing: 5,
@@ -84,13 +113,13 @@ const PaletteStyles = StyleSheet.create({
     textAlign: "center",
   },
   smMain: {
-    color: "#FFFFFF",
+    color: darkMode ? "#FFF" : "#000",
     fontSize: 18,
     // fontFamily: "Poppins-SemiBold",
-    letterSpacing: 5,
+    // letterSpacing: 5,
     fontWeight: "700",
-    textAlign: "center",
-    textShadowColor: "#000"
+    // textAlign: "center",
+    textShadowColor: "#000",
   },
   mediumText: {
     color: "#FFFFFF",
@@ -104,11 +133,11 @@ const PaletteStyles = StyleSheet.create({
   // spacing: 6 | 8,
   hSpacing: {
     paddingHorizontal: 12,
-    marginHorizontal: 12
+    marginHorizontal: 12,
   },
   vSpacing: {
     paddingVertical: 45,
-    marginVertical: 10
+    marginVertical: 10,
   },
 
   inputField: {
@@ -117,18 +146,19 @@ const PaletteStyles = StyleSheet.create({
     paddingLeft: 18,
     marginVertical: 6,
     borderRadius: 24,
-    width: "92%"
+    width: "92%",
   },
   button: {
-    borderRadius: 32, 
+    borderRadius: 32,
     padding: 18,
     backgroundColor: "#3f86cf4f",
     shadowOpacity: 0.21,
+    alignItems: "center",
     shadowOffset: {
       width: 14,
       height: -13,
     },
-    marginBottom: 15
+    marginBottom: 15,
   },
 
   border: {

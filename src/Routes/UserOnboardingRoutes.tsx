@@ -15,7 +15,7 @@ const Stack = createStackNavigator();
 
 const UserNav = () => {
   return (
-    <Stack.Navigator initialRouteName="UserRouting" screenOptions={{ headerShown: false }}>
+    <Stack.Navigator initialRouteName="Onboarding" screenOptions={{ headerShown: false }}>
       <Stack.Screen
         name="UserRouting"
         component={UserRouting}
@@ -24,7 +24,7 @@ const UserNav = () => {
         }}
       />
       <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={RegisterUser} />
+      <Stack.Screen name="RegisterUser" component={RegisterUser} />
 
       <Stack.Group
         screenOptions={{

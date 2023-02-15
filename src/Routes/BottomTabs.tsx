@@ -22,7 +22,7 @@ const BottomTabs = () => {
         component={Initial}
         options={{
           tabBarIcon: () => (
-            <Icon name="home-outline" size={25} type="ionicon" color={PaletteStyles.colorScheme1.color} />
+            <Icon name="home-outline" size={45} type="ionicon" color={PaletteStyles.colorScheme1.color} />
           ),
         }}
       />
@@ -47,10 +47,11 @@ const BottomTabs = () => {
         name="Receipts"
         component={History}
         options={{
+        tabBarItemStyle: { height: 0, display: "none" },
           tabBarIcon: () => (
             <Icon
               name="receipt-outline"
-              size={28}
+              size={45}
               type="ionicon"
               color={PaletteStyles.colorScheme1.color}
             />
@@ -63,7 +64,7 @@ const BottomTabs = () => {
         component={Profile}
         options={{
           tabBarIcon: () => (
-            <Icon name="user" size={30} type="feather" color={PaletteStyles.colorScheme1.color} />
+            <Icon name="user" size={45} type="feather" color={PaletteStyles.colorScheme1.color} />
           ),
         }}
       />
