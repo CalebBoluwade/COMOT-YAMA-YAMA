@@ -8,6 +8,8 @@ import {
   TranactionStatus,
   RegisterUserRouting,
   UserRouting,
+  VendorRegistration,
+  VendorLogin,
 } from "../Screens/index";
 import { Onboarding, RegisterUser, Login } from "../Screens/index";
 
@@ -24,7 +26,9 @@ const UserNav = () => {
         }}
       />
       <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="VendorLogin" component={VendorLogin} />
       <Stack.Screen name="RegisterUser" component={RegisterUser} />
+      <Stack.Screen name="RegisterVendor" component={VendorRegistration} />
 
       <Stack.Group
         screenOptions={{

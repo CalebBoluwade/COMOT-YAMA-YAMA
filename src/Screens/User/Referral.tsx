@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
-import PaletteStyles from "../../Style/AppPalette";
+import {PaletteStyles} from "../../Style/AppPalette";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../Context/Store";
 

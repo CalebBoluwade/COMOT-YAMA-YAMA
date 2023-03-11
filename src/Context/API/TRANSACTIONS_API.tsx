@@ -1,11 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import axiosBaseQuery from "./API";
-const tempUrl = "http://192.168.0.106:1732/api/v1";
+import {axiosBaseQuery, tempUrl, prodUrl} from "./API";
 
 export const TransactionsAPI = createApi({
   reducerPath: "TransactionsAPI",
   baseQuery: axiosBaseQuery({
-    baseUrl: tempUrl,
+    baseUrl: __DEV__ ? tempUrl : prodUrl,
   }),
   endpoints: (builder) => ({
     fetchTransactions: builder.query<any, any>({
@@ -27,6 +26,9 @@ export const TransactionsAPI = createApi({
         body: payload,
         params: null,
       }),
+      transformResponse: (response: any) => {
+          
+      }
     }),
   }),
 });

@@ -1,60 +1,70 @@
-import { Animated, StyleSheet, Text, View } from "react-native";
+import { Animated, StyleSheet, Text, Modal } from "react-native";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Context/Store";
 import { Icon } from "react-native-elements";
-import PaletteStyles from "../Style/AppPalette";
-import { _NULS } from "../Context/Data/Server";
+import {PaletteStyles} from "../Style/AppPalette";
+import { Inactive, _NULS } from "../Context/Data/Server";
 
 const Response = () => {
-  const { status } = useSelector((state: RootState) => state.Server);
+  const { status, open } = useSelector((state: RootState) => state.Server);
 
   const Dispatch = useDispatch();
 
   // useEffect(() => {
     setTimeout(() => {
       Dispatch(_NULS());
-    }, 3000);
+    }, 7000);
   // }, []);
 
-  // console.log(status)
-
   return (
-    <>
-    {status.isActive !== null ? 
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={open}
+      onRequestClose={() => Dispatch(_NULS())}
+    >
       <Animated.View
         style={[
-          styles.container,
-          { backgroundColor: status.isActive === true ? "green" : "red" },
+          styles.Modal,
+          { flexDirection: "row" },
         ]}
       >
         <Icon
           name={status.isActive === true ? "check" : "close"}
-          size={45}
+          size={15}
           type="material"
-          // color={PaletteStyles.colorScheme1.color}
+          reverse
+          color={ status.isActive === true ? "green" : "red"}
         />
-        <Text style={PaletteStyles.smTextBold}>{status.message}</Text>
+        <Text style={[PaletteStyles.smTextBold, {color: PaletteStyles.darkMode.color, textAlign: "center"}]}>{status.message}</Text>
       </Animated.View>
 
-    : null }
-    </>
+    </Modal>
   );
 };
 
 export default Response;
 
 const styles = StyleSheet.create({
-  container: {
+  Modal: {
+    width: "75%",
+    // maxHeight: "10%",
+    // height: 275,
+    backgroundColor: PaletteStyles.darkMode.backgroundColor,
+    padding: 8,
     position: "absolute",
-    bottom: 15,
-    left: 10,
-    right: 10,
-    borderRadius: 10,
-    paddingVertical: 18,
-    paddingHorizontal: 12,
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    bottom: 21,
+    alignSelf: "center",
+    justifyContent: "space-around",
     alignItems: "center",
+    borderRadius: 21,
+    // elevation: 3,
+    shadowColor: "#000",
+    shadowRadius: 21,
+    shadowOffset: {
+      width: 4,
+      height: 3,
+    },
   },
 });

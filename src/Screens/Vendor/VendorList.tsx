@@ -1,22 +1,26 @@
-import { StyleSheet, Text, View } from "react-native";
-import React from "react";
-import PaletteStyles from "../../Style/AppPalette";
+import { StyleSheet, Text, View, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import {PaletteStyles} from "../../Style/AppPalette";
 import GoBack from "../../Components/GoBack";
 import { FlashList } from "@shopify/flash-list";
 import VendorCell from "../../Components/VendorCell";
+import { VendorListData } from "../../utils/schemas/Types";
+import { SelectList } from "react-native-dropdown-select-list";
 
-const VendorList = ({ navigation }: any) => {
-  const DATA = [
-    {
-      title: "First Item",
-    },
-    {
-      title: "Second Item",
-    },
-  ];
+const VendorList = ({ route, navigation }: any) => {
+  const vendorData: VendorListData[] = route.params.data;
+  const isLoading: boolean = route.params.isLoading;
 
-  const renderVendorList = ({ item }: any) => {
-    return <VendorCell item={item} />;
+  const [selected, setSelected] = useState("");
+
+  const renderVendorList = ({
+    item,
+    index,
+  }: {
+    item: VendorListData;
+    index: number;
+  }) => {
+    return <VendorCell item={item} index={index} />;
   };
 
   return (
@@ -35,12 +39,28 @@ const VendorList = ({ navigation }: any) => {
         </View>
       </View>
 
-
-      <FlashList
-        renderItem={({ item }: any) => renderVendorList(item)}
-        estimatedItemSize={5}
-        data={DATA}
+      <SelectList
+        setSelected={(val: any) => setSelected(val)}
+        data={vendorData.map(vendor => vendor.companyName.toLocaleUpperCase())}
+        save="value"
+        search={true}
+        onSelect={() => alert(selected)}
+        boxStyles={{
+          backgroundColor: PaletteStyles.darkMode.color,
+          marginTop: PaletteStyles.vSpacing.marginVertical,
+          borderWidth: 2,
+          borderColor: PaletteStyles.colorScheme1.color,
+        }}
+        dropdownStyles={{ backgroundColor: PaletteStyles.darkMode.color }}
       />
+
+      <View style={{ padding: 12 }}>
+        <FlatList
+          renderItem={(item) => renderVendorList(item)}
+          // estimatedItemSize={20}
+          data={vendorData}
+        />
+      </View>
     </View>
   );
 };

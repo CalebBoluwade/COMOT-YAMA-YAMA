@@ -1,15 +1,16 @@
-import { StyleSheet, Text, View, Image } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableHighlight } from "react-native";
 import { RootState } from "../Context/Store";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const UserIcon = ({ type }: any) => {
+const UserIcon = ({ navigation }: any) => {
   const { userData } = useSelector((state: RootState) => state.UserData);
 
-  let letter = userData?.fullName.split(" ");
+  let letter = userData.userType === "USER" ? userData?.fullName.split(" ") : userData?.companyName.split(" ");
+  let charsArray: Array<string> = []
 
-  letter?.forEach(item => letter = [...letter, item.charAt(0)])
-  const chars = letter[2] + letter[3];
+  letter?.forEach(item => charsArray = [...charsArray, item.charAt(0)])
+  const chars = charsArray[0] + charsArray[1];
 
   return (
     <>
@@ -20,7 +21,7 @@ const UserIcon = ({ type }: any) => {
         resizeMode="contain"
       />
     : */}
-      <View
+      <TouchableHighlight
         style={{
           borderRadius: 150,
           backgroundColor: "green",
@@ -30,11 +31,12 @@ const UserIcon = ({ type }: any) => {
           alignItems: "center",
           justifyContent: "center",
         }}
+        onPress={() => navigation.navigate("Profile")}
       >
         <Text style={{ color: "#fff", fontWeight: "600", fontSize: 16 }}>
-          {chars || ""}
+          {chars.toUpperCase() || ""}
         </Text>
-      </View>
+      </TouchableHighlight>
       {/* } */}
     </>
   );

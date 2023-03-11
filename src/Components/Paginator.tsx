@@ -3,10 +3,10 @@ import React from "react";
 
 const { width } = Dimensions.get("window");
 
-const Paginator = ({ data, scrollX }) => {
+const Paginator = ({ data, scrollX }: any) => {
   return (
     <View style={{ flexDirection: "row", height: 54 }}>
-      {data?.map((_, i) => {
+      {data?.map((_: any, i: number) => {
         const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
 
         const dotWidth = scrollX.interpolate({

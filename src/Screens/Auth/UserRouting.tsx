@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from 'react-native'
 import React from 'react'
-import PaletteStyles from '../../Style/AppPalette'
+import {PaletteStyles} from '../../Style/AppPalette'
 
 const UserRouting = ({navigation}:any) => {
   return (

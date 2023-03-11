@@ -12,89 +12,64 @@ import {PaletteStyles} from "../../Style/AppPalette";
 import { Active, Inactive } from "../../Context/Data/Server";
 import { useDispatch } from "react-redux";
 import { Icon } from "react-native-elements";
-import {
-  useRegisterMutation,
-} from "../../Context/API/AUTH_API";
-import {
- useValidateRefCodeMutation,
-} from "../../Context/API/REFERRAL_API";
 import Checkbox from "expo-checkbox";
+import { useRegisterVendorMutation } from "../../Context/API/VENDOR_API";
 
-const RegisterUser = ({ navigation }: any) => {
-  const [first, setFirst] = useState<string>("");
-  const [last, setLast] = useState<string>("");
+const VendorRegistration = ({ navigation }: any) => {
+  const [Name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [refCode, setRefCode] = useState<string>("NA");
+  const [address, setAddress] = useState("");
 
   const [isChecked, setChecked] = useState(false);
-  const [validateRef] = useValidateRefCodeMutation();
-  const [Register, {isLoading}] = useRegisterMutation();
+  const [RegisterVendor, { isLoading }] = useRegisterVendorMutation();
 
   const Dispatch = useDispatch();
   let status: boolean = false;
 
-  const validateRefCode = () => {
-    if (refCode !== "NA"){
-      validateRef({
-        ref: refCode,
+  const Registration = () => {
+    if (isChecked) {
+      RegisterVendor({
+        companyName: Name,
+        email: email.toLowerCase(),
+        password,
+        address,
+        phoneNumber: phoneNumber,
       })
         .unwrap()
         .then((data) => {
-          Dispatch(Active({ message: "🤩 Successful" }));
+          // Dispatch(Loginn(data?.existingUser));
+          navigation.navigate("Login");
+          Dispatch(Active({ message: "Sucessful" }));
         })
         .catch((err) => {
-          Dispatch(Inactive({ message: err?.data?.message || err.data || "Server error" }));
+            console.log(err)
+          Dispatch(
+            Inactive({
+              message: err?.data[0]?.message || err.data || "Server error",
+            })
+          );
         });
     } else {
-      Dispatch(Inactive({ message: "Enter a valid code" }));
+        Dispatch(
+            Inactive({
+              message: "Accept T & C's",
+            })
+          );
     }
-  };
-
-  const Registration = () => {
-    Register({
-      fullName: first + " " + last,
-      email: email.toLowerCase(),
-      password: password,
-      userType: "USER",
-      refCode: refCode,
-      phoneNumber: phoneNumber,
-    })
-      .unwrap()
-      .then((data) => {
-        // Dispatch(Loginn(data?.existingUser));
-        Dispatch(Active({ message: "Sucessful" }));
-        navigation.navigate("Login")
-      })
-      .catch((err) => {
-        Dispatch(Inactive({ message: err?.data[0]?.message || err.data || "Server error" }));
-      });
   };
 
   return (
     <View style={[PaletteStyles.container, { backgroundColor: "#000" }]}>
-      <View style={{ paddingTop: 15, padding: 12 }}>
-        <Text style={[PaletteStyles.lgTextBoldx2, { color: "#FFF" }]}>
-          REGISTER
-        </Text>
-        <Text
-          style={[
-            PaletteStyles.lgTextLight,
-            { textAlign: "left", justifyContent: "flex-start" },
-          ]}
-        >
-          No hidden fees. No hassles
-        </Text>
-      </View>
-
       <KeyboardAvoidingView
-      keyboardVerticalOffset={50}
         // behavior={Platform.OS === "ios" ? "position" : "padding"}
         enabled
-        style={[PaletteStyles.styleContainer, {paddingTop: 10, overflow: "scroll"}]}
+        style={[
+          PaletteStyles.styleBottomContainer,
+          { paddingTop: 10, overflow: "scroll" },
+        ]}
       >
-
         <View
           style={{
             flexDirection: "row",
@@ -118,20 +93,38 @@ const RegisterUser = ({ navigation }: any) => {
             autoCorrect={false}
             keyboardType="name-phone-pad"
             placeholderTextColor={"#CCC"}
-            style={[PaletteStyles.inputField, { width: "47%" }]}
-            placeholder="first-name"
-            onChangeText={(text) => setFirst(text)}
+            style={[PaletteStyles.inputField, { width: "90%" }]}
+            placeholder="company short name"
+            onChangeText={(text) => setName(text)}
           />
+        </View>
 
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            borderRadius: 15,
+            marginVertical: 8,
+          }}
+        >
+          <Icon
+            name="office-building-marker"
+            size={30}
+            type="material-community"
+            color={PaletteStyles.colorScheme1.color}
+            // style={{ marginLeft: 4 }}
+          />
           <TextInput
             selectionColor={PaletteStyles.colorScheme1.color}
             // onFocus={}
             autoCorrect={false}
             keyboardType="name-phone-pad"
             placeholderTextColor={"#CCC"}
-            style={[PaletteStyles.inputField, { width: "47%" }]}
-            placeholder="last-name"
-            onChangeText={(text) => setLast(text)}
+            style={[PaletteStyles.inputField, { width: "90%" }]}
+            placeholder="address"
+            onChangeText={(text) => setAddress(text)}
           />
         </View>
 
@@ -171,39 +164,6 @@ const RegisterUser = ({ navigation }: any) => {
             justifyContent: "space-between",
             backgroundColor: "rgba(255, 255, 255, 0.4)",
             borderRadius: 15,
-          }}
-        >
-          <Icon
-            name="lastpass"
-            size={30}
-            type="material-community"
-            color={PaletteStyles.colorScheme1.color}
-            style={{ marginLeft: 4 }}
-          />
-          <TextInput
-            keyboardType="default"
-            style={PaletteStyles.inputField}
-            secureTextEntry
-            placeholder="password"
-            placeholderTextColor={"#CCC"}
-            onChangeText={(text) => setPassword(text)}
-          />
-          <Icon
-            name="eye"
-            size={30}
-            type="font-awesome"
-            color={PaletteStyles.colorScheme1.color}
-            style={{ position: "relative", right: 45 }}
-          />
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            backgroundColor: "rgba(255, 255, 255, 0.4)",
-            borderRadius: 15,
             marginVertical: 12,
           }}
         >
@@ -220,7 +180,7 @@ const RegisterUser = ({ navigation }: any) => {
             keyboardType="phone-pad"
             placeholderTextColor={"#CCC"}
             style={PaletteStyles.inputField}
-            placeholder="802 3456 789"
+            placeholder="phone-number"
             onChangeText={(text) => setPhoneNumber(text)}
           />
         </View>
@@ -232,40 +192,52 @@ const RegisterUser = ({ navigation }: any) => {
             justifyContent: "space-between",
             backgroundColor: "rgba(255, 255, 255, 0.4)",
             borderRadius: 15,
-            marginVertical: 12,
           }}
         >
           <Icon
-            name="ios-people"
+            name="lastpass"
             size={30}
-            type="ionicon"
+            type="material-community"
             color={PaletteStyles.colorScheme1.color}
             style={{ marginLeft: 4 }}
           />
           <TextInput
-            selectionColor={PaletteStyles.colorScheme1.color}
-            autoCorrect={false}
-            keyboardType="default"
-            placeholderTextColor={"#CCC"}
+            keyboardType="visible-password"
             style={PaletteStyles.inputField}
-            placeholder="Ref Code (Optional)"
-            onChangeText={(text) => setRefCode(text)}
+            secureTextEntry
+            placeholder="password"
+            placeholderTextColor={"#CCC"}
+            onChangeText={(text) => setPassword(text)}
           />
-          <TouchableOpacity
-            onPress={() => validateRefCode()}
-            style={{
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
-              borderRadius: 15,
-              padding: 15,
-              alignSelf: "flex-end",
-              position: "absolute",
-              left: PaletteStyles.Width.width - 120,
-              bottom: 21,
-            }}
-          >
-            <Text>VERIFY</Text>
-          </TouchableOpacity>
+          <Icon
+            name="eye"
+            size={30}
+            type="font-awesome"
+            color={PaletteStyles.colorScheme1.color}
+            style={{ position: "relative", right: 45 }}
+          />
         </View>
+
+        <TouchableOpacity
+          style={[
+            PaletteStyles.button,
+            {
+              width: "70%",
+              alignSelf: "center",
+              marginTop: PaletteStyles.vSpacing.marginVertical + 5,
+            },
+          ]}
+          onPress={() => Registration()}
+        >
+          <Text
+            style={[
+              PaletteStyles.lgTextBold,
+              { color: PaletteStyles.colorScheme1.color, textAlign: "center" },
+            ]}
+          >
+            Sign Up
+          </Text>
+        </TouchableOpacity>
 
         <View
           style={{ flexDirection: "row", alignItems: "center", width: "100%" }}
@@ -312,39 +284,26 @@ const RegisterUser = ({ navigation }: any) => {
             </TouchableOpacity>
           </Text>
         </View>
-
-        <TouchableOpacity
-          style={[
-            PaletteStyles.button,
-            {
-              width: "70%",
-              alignSelf: "center",
-              marginTop: PaletteStyles.vSpacing.marginVertical + 7,
-            },
-          ]}
-          onPress={() => Registration()}
-        >
-          <Text
-            style={[
-              PaletteStyles.lgTextBold,
-              { color: PaletteStyles.colorScheme1.color, textAlign: "center" },
-            ]}
-          >
-            Sign Up
-          </Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
 
-      {/* <TouchableOpacity>
-        <Text style={[PaletteStyles.colorScheme1, PaletteStyles.lgTextBold]}>
-          SCAN CODE
+      <View style={{ paddingTop: 15, padding: 12 }}>
+        <Text style={[PaletteStyles.lgTextBold, { color: "#FFF" }]}>
+          JOIN US
         </Text>
-      </TouchableOpacity> */}
+        <Text
+          style={[
+            PaletteStyles.lgTextLight,
+            { textAlign: "left", justifyContent: "flex-start" },
+          ]}
+        >
+          No hidden fees. No hassles
+        </Text>
+      </View>
     </View>
   );
 };
 
-export default RegisterUser;
+export default VendorRegistration;
 
 const styles = StyleSheet.create({
   checkbox: {

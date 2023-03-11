@@ -1,17 +1,17 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { registerData, serverData } from "../../utils/schemas/Types";
-import axiosBaseQuery from "./API";
-const tempUrl = "http://192.168.0.106:1732/api/v1";
+import { RegisterData, serverData } from "../../utils/schemas/Types";
+import {axiosBaseQuery, tempUrl, prodUrl} from "./API";
+import Env from "../../Config/env";
 
 export const UserAuthApi = createApi({
   reducerPath: "UserAuthApi",
   baseQuery: axiosBaseQuery({
-    baseUrl: tempUrl,
+    baseUrl: __DEV__ ? tempUrl : prodUrl,
   }),
   endpoints: (builder) => ({
-    login: builder.mutation<any, any>({
+    login: builder.mutation<{message: string, data: object, accessToken: string}, {user: string, password: string;}>({
       query: (payload) => ({
-        url: "/login",
+        url: "/users/continue",
         method: "POST",
         token: "",
         data: "",
@@ -19,9 +19,9 @@ export const UserAuthApi = createApi({
         params: null,
       }),
     }),
-    register: builder.mutation<any, any>({
+    register: builder.mutation<any, RegisterData>({
       query: (payload) => ({
-        url: "/join",
+        url: "/users/join",
         token: "",
         method: "POST",
         data: "",
@@ -29,24 +29,14 @@ export const UserAuthApi = createApi({
         params: null,
       }),
     }),
-    generateRefCode: builder.mutation({
+    verifyUser: builder.query<any, {id: string, verificationCode: string}>({
       query: (payload) => ({
-        url: "/generate/referral",
+        url: `/users/verify/${payload.id}/${payload.verificationCode}`,
         token: "",
-        method: "POST",
+        method: "GET",
         data: "",
-        body: payload,
-        params: null,
-      }),
-    }),
-    validateRefCode: builder.mutation<any, { ref: string }>({
-      query: (payload) => ({
-        url: "/validate/referral",
-        token: "",
-        method: "POST",
-        data: "",
-        body: payload,
-        params: null,
+        body: null,
+        params: payload,
       }),
     }),
     serverStatus: builder.query<serverData, void>({
@@ -65,7 +55,6 @@ export const UserAuthApi = createApi({
 export const {
   useLoginMutation,
   useRegisterMutation,
-  useGenerateRefCodeMutation,
-  useValidateRefCodeMutation,
-  useServerStatusQuery,
+  useVerifyUserQuery,
+  useServerStatusQuery
 } = UserAuthApi;

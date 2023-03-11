@@ -2,13 +2,13 @@ import axios from "axios";
 import { API } from "../../utils/schemas/Types";
 // import { REHYDRATE } from 'redux-persist';
 
-interface props {
-  baseUrl: string;
-  // prepareHeaders: any;
-}
+export const tempUrl = "http://192.168.0.106:8888/api/v1";
+export const prodUrl = "https://comotyamayama.netlify.app/api/v1";
 
-const axiosBaseQuery =
-  ({ baseUrl }: props) =>
+export const axiosBaseQuery =
+  ({ baseUrl }: {
+    baseUrl: string;
+  }) =>
   async ({ url, token, method, data, body, params }: API) => {
     try {
       if (token) {
@@ -36,5 +36,3 @@ const axiosBaseQuery =
       };
     }
   };
-
-export default axiosBaseQuery;

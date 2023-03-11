@@ -1,15 +1,15 @@
-// import { createDrawerNavigator } from "@react-navigation/drawer";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Platform } from "react-native";
-import UserLocation from "../Components/UserLocation";
+
 import {
   DisposeRecycle,
   Maps,
   ProfileQR,
   Referral,
   TranactionStatus,
+  UserActivityDetails,
   VendorList,
 } from "../Screens/index";
 
@@ -50,15 +50,15 @@ const StackNav = () => {
         />
 
         <Stack.Screen
+          name="UserActivityDetails"
+          component={UserActivityDetails}
+        />
+
+        <Stack.Screen
           name="TransHistory"
           component={TranactionStatus}
           options={{
             presentation: "modal",
-            // cardStyle: {
-            //   elevation: 3,
-            //   // backgroundColor:
-            //   //   Platform.OS === "ios" ? "transparent" : "rgba(0, 0, 0, 0)",
-            // },
           }}
         />
         <Stack.Screen name="ProfileQR" component={ProfileQR} />

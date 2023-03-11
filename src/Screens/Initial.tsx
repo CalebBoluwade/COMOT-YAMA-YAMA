@@ -7,13 +7,12 @@ import {
   Animated,
   FlatList,
   Image,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { LogOutUser } from "../Context/Data/Auth";
 import { RootState } from "../Context/Store";
-import PaletteStyles from "../Style/AppPalette";
+import { PaletteStyles } from "../Style/AppPalette";
 import { useServerStatusQuery } from "../Context/API/AUTH_API";
 import { initData } from "../Context/Data/Server";
 import UserIcon from "../Components/UserIcon";
@@ -24,7 +23,7 @@ const Initial = ({ navigation }: any) => {
   const [idleTime, setIdleTime] = useState(0);
 
   const { userData } = useSelector((state: RootState) => state.UserData);
-  const { data, isLoading } = useServerStatusQuery();
+  // const { data, isLoading } = useServerStatusQuery();
 
   // const dispatch = useDispatch();
   // const { isLoading, data } = useServerStatusQuery();
@@ -91,21 +90,33 @@ const Initial = ({ navigation }: any) => {
   // };
 
   return (
-    <View style={[PaletteStyles.container, { backgroundColor: "#3f86cf4f" }]}>
+    <View
+      style={[
+        PaletteStyles.container,
+        { backgroundColor: PaletteStyles.darkMode.color },
+      ]}
+    >
       <View
         style={{
           flexDirection: "row",
           alignItems: "center",
           justifyContent: "space-between",
-          padding: PaletteStyles.hSpacing.paddingHorizontal,
+          paddingHorizontal: PaletteStyles.hSpacing.paddingHorizontal,
         }}
       >
         {/* <UserIcon /> */}
         <View style={{ paddingLeft: 5 }}>
-          <Text style={[PaletteStyles.lgTextBold, { color: "#FFF" }]}>
-            {userData?.fullName}
+          <Text style={PaletteStyles.colorScheme1}>Welcome Back</Text>
+          <Text
+            style={[
+              PaletteStyles.smMain,
+              { color: PaletteStyles.darkMode.backgroundColor },
+            ]}
+          >
+            {userData.userType === "USER"
+              ? userData?.fullName.toLocaleUpperCase()
+              : userData?.companyName.toLocaleUpperCase()}
           </Text>
-          <Text style={PaletteStyles.colorScheme1}>{userData?.userType}</Text>
         </View>
 
         <View
@@ -121,18 +132,18 @@ const Initial = ({ navigation }: any) => {
             size={25}
             style={{ marginLeft: 25 }}
           />
-          <UserIcon />
+          <UserIcon navigation={navigation} />
         </View>
       </View>
 
       <ScrollView
-      showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
         style={[
           PaletteStyles.styleContainer,
           { backgroundColor: PaletteStyles.darkMode.backgroundColor },
         ]}
       >
-        <Animated.View style={{ height: 265 }}>
+        {/* <Animated.View style={{ height: 265 }}>
           <FlatList
             data={imageArray}
             renderItem={(item) => renderBoardSlides(item)}
@@ -152,13 +163,17 @@ const Initial = ({ navigation }: any) => {
             // viewabilityConfig={viewConfig}
             // ref={slidesRef}
           />
-        </Animated.View>
+        </Animated.View> */}
 
-        <Text style={[PaletteStyles.lgTextBold, { padding: 10 }]}>
-          Quick To Do's
+        <Text style={[PaletteStyles.smTextBold, { padding: 8 }]}>
+          Quick Actions
         </Text>
 
-        <View style={PaletteStyles.gridLayout}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={[PaletteStyles.gridLayout]}
+        >
           <TouchableOpacity
             style={[
               PaletteStyles.viewBox,
@@ -180,19 +195,19 @@ const Initial = ({ navigation }: any) => {
                   ? "delete-empty-outline"
                   : "truck-delivery-outline"
               }
-              size={25}
+              size={21}
               raised
               type="material-community"
               color={PaletteStyles.colorScheme1.color}
             />
             <Text style={{ color: PaletteStyles.darkMode.color }}>
               {userData.userType === "USER"
-                ? "DISPOSE"
-                : "VIEW PENDING PICKUPS"}
+                ? "DISPOSE & RECYCLE"
+                : "PENDING PICKUPS"}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={[
               PaletteStyles.viewBox,
               PaletteStyles.button,
@@ -208,7 +223,7 @@ const Initial = ({ navigation }: any) => {
               // style={{ marginLeft: 4 }}
             />
             <Text style={{ color: PaletteStyles.darkMode.color }}>RECYCLE</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <TouchableOpacity
             style={[
@@ -216,10 +231,15 @@ const Initial = ({ navigation }: any) => {
               PaletteStyles.button,
               PaletteStyles.gridBox,
             ]}
+            onPress={
+              userData.userType === "USER"
+                ? () => navigation.navigate("UserActivity")
+                : () => navigation.navigate("VendorActivity")
+            }
           >
             <Icon
               name="calendar-outline"
-              size={25}
+              size={21}
               raised
               type="ionicon"
               color={PaletteStyles.colorScheme1.color}
@@ -239,7 +259,7 @@ const Initial = ({ navigation }: any) => {
           >
             <Icon
               name="receipt-outline"
-              size={25}
+              size={21}
               raised
               type="ionicon"
               color={PaletteStyles.colorScheme1.color}
@@ -248,6 +268,77 @@ const Initial = ({ navigation }: any) => {
               TRANSACTION HISTORY
             </Text>
           </TouchableOpacity>
+        </ScrollView>
+
+        <Image source={require("../../assets/Logistics.png")} style={styles.image} resizeMode="contain" />
+
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            // justifyContent: "space-between",
+            // paddingHorizontal: PaletteStyles.hSpacing.paddingHorizontal,
+          }}
+        >
+          <Text style={[PaletteStyles.smTextBold, { padding: 8 }]}>
+            Upcoming Schedule
+          </Text>
+          <Icon
+            name="bell"
+            size={15}
+            type="entypo"
+            color={PaletteStyles.darkMode.color}
+          />
+        </View>
+
+        <View
+          style={[
+            PaletteStyles.gridLayout,
+            PaletteStyles.button,
+            { height: 200, margin: 8 },
+          ]}
+        >
+          <Text style={[PaletteStyles.lgTextBold, {width: "90%"}]}>17 MARCH</Text>
+          <Text style={PaletteStyles.smTextLight}>12 Days</Text>
+        </View>
+
+        <Text style={[PaletteStyles.smTextBold, { padding: 8 }]}>
+          Activity
+          </Text>
+        <View style={PaletteStyles.gridLayout}>
+          <View
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox,
+              {width: "45%", height: 75}
+            ]}
+          >
+            <Text style={{ color: PaletteStyles.darkMode.color }}>Total</Text>
+            <Text style={{ color: PaletteStyles.darkMode.color }}>6</Text>
+          </View>
+
+          <View
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox, {width: "45%", height: 75}
+            ]}
+          >
+            <Text style={{ color: PaletteStyles.darkMode.color }}>Pending</Text>
+            <Text style={{ color: PaletteStyles.darkMode.color }}>6</Text>
+          </View>
+
+          <View
+            style={[
+              PaletteStyles.viewBox,
+              PaletteStyles.button,
+              PaletteStyles.gridBox, {width: "45%", height: 75}
+            ]}
+          >
+            <Text style={{ color: PaletteStyles.darkMode.color }}>Completed</Text>
+            <Text style={{ color: PaletteStyles.darkMode.color }}>6</Text>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -259,7 +350,7 @@ export default Initial;
 const styles = StyleSheet.create({
   image: {
     width: "90%",
-    height: 265,
+    height: 225,
     alignSelf: "center",
   },
 
@@ -268,6 +359,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     width: PaletteStyles.Width.width,
-    height: 265,
+    height: 235,
   },
 });

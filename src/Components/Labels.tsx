@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import PaletteStyles from "../Style/AppPalette";
+import {PaletteStyles} from "../Style/AppPalette";
 
 const Label = ({
   title,
@@ -12,8 +12,8 @@ const Label = ({
   showRequired: boolean;
 }) => {
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", margin: 5 }}>
-      <Text style={PaletteStyles.smTextLight}>{title}</Text>
+    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+      <Text style={[PaletteStyles.smTextLight, { marginLeft: 8}]}>{title}</Text>
 
       {showRequired ? (
         <View
@@ -21,7 +21,7 @@ const Label = ({
             backgroundColor: PaletteStyles.bgColorScheme1.backgroundColor,
             borderRadius: PaletteStyles.border.borderRadius,
             padding: 8,
-            marginLeft: 8,
+            marginLeft: 15,
           }}
         >
           <Text style={{ color: PaletteStyles.colorScheme1.color }}>

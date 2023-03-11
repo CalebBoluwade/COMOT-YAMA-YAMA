@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import React,{ useState} from "react";
-import PaletteStyles from "../../Style/AppPalette";
+import {PaletteStyles} from "../../Style/AppPalette";
 import { Icon } from "react-native-elements";
 import Referral from "./Referral";
 

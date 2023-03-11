@@ -7,6 +7,9 @@ import { Store } from "./src/Context/Store";
 import { Provider } from "react-redux";
 import CombinedRoutes from "./src/Routes/CombinedRoutes";
 import { useFonts } from "expo-font";
+import { AppTheme, PaletteStyles } from "./src/Style/AppPalette";
+import PushNotification from "./src/Components/PushNotification";
+import "react-native-gesture-handler";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,9 +29,13 @@ export default function App() {
   return (
         //  <View style={styles.container} onLayout={onLayoutRootView}>
     <Provider store={Store}>
+        {/* <PushNotification /> */}
       <NavigationContainer>
-          <StatusBar style="auto" />
+        <AppTheme />
+          <StatusBar style="inverted" />
+          <View style={styles.container}>
           <CombinedRoutes />
+          </View>
       </NavigationContainer>
     </Provider>
   );
@@ -36,8 +43,6 @@ export default function App() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1
   },
 });

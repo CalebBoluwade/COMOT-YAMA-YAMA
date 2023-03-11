@@ -24,13 +24,13 @@ const CombinedRoutes: Function = () => {
     <>
       {isUserAuth ? (
         <>
-          <BottomTabs />
           <Response />
+          <BottomTabs />
         </>
       ) : (
         <>
-          <UserNav />
           <Response />
+          <UserNav />
         </>
       )}
     </>

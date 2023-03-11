@@ -1,12 +1,12 @@
 import { StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
-import PaletteStyles from "../Style/AppPalette";
+import {PaletteStyles} from "../Style/AppPalette";
 
 const GoBack = ({ navigation }: any) => {
   return (
     <TouchableOpacity
-      style={{ alignSelf: "flex-start" }}
+      style={{ alignSelf: "flex-start", marginRight: 8 }}
       onPress={() => navigation.goBack()}
     >
       <Icon

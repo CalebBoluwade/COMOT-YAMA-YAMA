@@ -1,6 +1,6 @@
 import { StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
 import React from "react";
-import PaletteStyles from "../../Style/AppPalette";
+import {PaletteStyles} from "../../Style/AppPalette";
 
 const RegisterUserRouting = ({ navigation }: any) => {
   return (
@@ -40,6 +40,7 @@ const RegisterUserRouting = ({ navigation }: any) => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          onPress={() => navigation.navigate("RegisterVendor")}
           style={[PaletteStyles.button, { padding: 24, width: "40%" }]}
         >
           <Text style={[PaletteStyles.smMain, {color: PaletteStyles.colorScheme1.color}]}>VENDOR</Text>

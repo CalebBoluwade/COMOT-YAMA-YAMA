@@ -10,7 +10,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import PaletteStyles from "../../Style/AppPalette";
+import {PaletteStyles} from "../../Style/AppPalette";
 import Paginator from "../../Components/Paginator";
 import { is } from "immer/dist/internal";
 // import e

@@ -7,7 +7,8 @@ const initialState: InitData = {
     discount: 10,
     showDisount: false,
   },
-  status: { isActive: null, message: "" },
+  status: { isActive: false, message: "" },
+  open: false
 };
 
 const serverSlice = createSlice({
@@ -16,15 +17,18 @@ const serverSlice = createSlice({
   reducers: {
     Active: (state, { payload }) => {
       state.status.isActive = true;
+      state.open = true;
       state.status.message = payload.message;
     },
     Inactive: (state, { payload }) => {
       state.status.isActive = false;
+      state.open = true;
       state.status.message = payload.message;
     },
 	_NULS: (state) => {
-		state.status.isActive = null;
-		state.status.message = "";
+		state.status.isActive = false;
+      state.open = false;
+      state.status.message = "";
 	  },
     initData: (state, { payload }) => {
       state.initData = payload.initData;

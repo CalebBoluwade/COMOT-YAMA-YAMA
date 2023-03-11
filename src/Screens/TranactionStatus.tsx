@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Icon } from "react-native-elements";
-import PaletteStyles from "../Style/AppPalette";
+import {PaletteStyles} from "../Style/AppPalette";
 import {
   TranactionStatus as TransStatus,
   TranactionType,
@@ -85,7 +85,10 @@ const TranactionStatus = ({ route, navigation }: any) => {
             >
               {transaction?.type === TranactionType.DEBIT ? "-" : "+"}
 
-              {transaction?.amount}
+              {new Intl.NumberFormat("en-ng", {
+                style: 'currency',
+                currency: 'NGN'
+                }).format(transaction?.amount)}
             </Text>
 
             <Text style={PaletteStyles.smTextLight}>{transaction?.type === TranactionType.DEBIT ? "plus" : "minus"} charges</Text>

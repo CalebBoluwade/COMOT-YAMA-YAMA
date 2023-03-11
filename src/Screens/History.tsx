@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, TouchableOpacity, FlatList } from "react-native";
 import React from "react";
-import PaletteStyles from "../Style/AppPalette";
+import {PaletteStyles} from "../Style/AppPalette";
 import { TranactionStatus, TranactionType, Transaction } from "../Utils/Schemas/Types";
 import GoBack from "../Components/GoBack";
 import { RootState } from "../Context/Store";
 import { useSelector } from "react-redux";
-import { useFetchTransactionsQuery } from "../Context/API/Transactions";
+import { useFetchTransactionsQuery } from "../Context/API/TRANSACTIONS_API";
 
 const History = ({navigation}: any) => {
 

@@ -1,14 +1,26 @@
 import { StyleSheet, Appearance, Dimensions } from "react-native";
-export const darkMode = Appearance.getColorScheme() === "dark";
+import {useEffect, useState} from 'react';
+import { useColorScheme, View } from 'react-native';
+import { AnyAction } from "@reduxjs/toolkit";
 
 let { width, height } = Dimensions.get("screen");
 
-() =>
-  Appearance.addChangeListener((listener) => {
-    console.log(listener);
-  })();
+const darkMode = Appearance.getColorScheme() === "dark";
 
-const PaletteStyles = StyleSheet.create({
+export const AppTheme = () => {
+  // const [darcMode, setdarcMode] = useState<any>()
+  // Appearance.addChangeListener((listener) => {
+  //   setdarcMode(listener.colorScheme);
+  // });
+
+  // const colorScheme = useColorScheme();
+  useEffect(() => {
+  }, [darkMode])
+
+  return null
+}
+
+export const PaletteStyles = StyleSheet.create({
   Width: {
     width: width,
   },
@@ -26,12 +38,27 @@ const PaletteStyles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingTop: 35,
+    paddingTop: 30,
     // paddingHorizontal: 18,
   },
   styleContainer: {
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    backgroundColor: "#FFF",
+    padding: 12,
+    flex: 3,
+    shadowOffset: {
+      width: 14,
+      height: -13,
+    },
+    shadowColor: darkMode ? "#FFF" : "#000",
+    // marginTop: 25,
+    overflow: "scroll"
+  },
+
+  styleBottomContainer: {
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
     backgroundColor: "#FFF",
     padding: 18,
     flex: 3,
@@ -40,40 +67,33 @@ const PaletteStyles = StyleSheet.create({
       height: -13,
     },
     shadowColor: darkMode ? "#FFF" : "#000",
-    marginTop: 15,
     overflow: "scroll"
   },
+
 
   gridLayout: {
     flexWrap: "wrap",
     flexDirection: "row",
-    justifyContent: "space-evenly",
-    // marginVertical: 8
   },
   gridBox: {
-    width: "45%",
+    margin: 8,
+    width: 245,
     borderRadius: 7,
-    padding: 18,
-    // backgroundColor: "#3f86cf4f",
-    // shadowOpacity: 0.21,
-    // shadowOffset: {
-    //   width: 14,
-    //   height: -13,
-    // },
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly"
   },
   viewBox: {
     marginVertical: 8,
     borderRadius: 10,
     shadowOpacity: 0.21,
-    alignItems: "center",
-    shadowColor: darkMode ? "#FFF" : "#000",
-    shadowOffset: {
-      width: -14,
-      height: 13,
-    },
+    // alignItems: "center",
+    // shadowColor: darkMode ? "#FFF" : "#000",
     borderWidth: 2,
     marginBottom: 15,
   },
+  
   lgTextBoldx2: {
     fontSize: 30,
     fontWeight: "900",
@@ -82,7 +102,7 @@ const PaletteStyles = StyleSheet.create({
   },
   lgTextBold: {
     fontSize: 25,
-    fontWeight: "900",
+    fontWeight: "700",
     letterSpacing: 1,
     color: darkMode ? "#FFF" : "#000",
     fontFamily: "Poppins-Bold"
@@ -91,11 +111,13 @@ const PaletteStyles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "800",
     letterSpacing: 2,
+    marginLeft: 8,
     color: darkMode ? "#FFF" : "#000",
   },
   lgTextLight: {
     fontSize: 20,
     fontWeight: "400",
+    marginLeft: 8,
     color: "#777",
   },
   smTextLight: {
@@ -114,10 +136,10 @@ const PaletteStyles = StyleSheet.create({
   },
   smMain: {
     color: darkMode ? "#FFF" : "#000",
-    fontSize: 18,
+    fontSize: 21,
     // fontFamily: "Poppins-SemiBold",
     // letterSpacing: 5,
-    fontWeight: "700",
+    fontWeight: "900",
     // textAlign: "center",
     textShadowColor: "#000",
   },
@@ -149,7 +171,7 @@ const PaletteStyles = StyleSheet.create({
     width: "92%",
   },
   button: {
-    borderRadius: 32,
+    borderRadius: 42,
     padding: 18,
     backgroundColor: "#3f86cf4f",
     shadowOpacity: 0.21,
@@ -171,5 +193,3 @@ const PaletteStyles = StyleSheet.create({
     backgroundColor: "#3f86cf4f",
   },
 });
-
-export default PaletteStyles;

@@ -2,7 +2,7 @@
   "expo": {
     "name": "COMOT YAMA YAMA",
     "slug": "COMOT-YMA_YAA",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
@@ -10,7 +10,7 @@
     "splash": {
       "image": "./assets/Recycling.png",
       "resizeMode": "contain",
-      "backgroundColor": "#25292e"
+      "backgroundColor": "#FFFFFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,7 +20,8 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.groovetech.comotyamayama"
+      "bundleIdentifier": "com.groovetech.comotyamayama",
+      "buildNumber": "1"
     },
     "android": {
       "package": "com.groovetech.comotyamayama",
@@ -28,6 +29,11 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyDia3qDtwTkXAyWLbJ45FR9NE4oafJE_RI"
+        }
       }
     },
     "web": {
@@ -41,12 +47,20 @@
         "photosPermission": "The app accesses selected photo to share with PSP vendor.",
         "cameraPermission" : "Allow COMOT YAMA YAMA to access your camera"
       }
+      ],
+      [
+        "onesignal-expo-plugin",
+        {
+          "mode": "development"
+          // devTeam: "91SW8A37CR"
+        }
       ]
     ],
     "extra": {
       "eas": {
         "projectId": "fd236a7d-fe1f-4612-86e9-bda196f44f62"
-      }
+      },
+      "oneSignalAppId": "50da044d-9f6d-420c-a896-cb560f9f9bee"
     }
   }
 }

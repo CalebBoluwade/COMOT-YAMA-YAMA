@@ -12,21 +12,21 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { Icon } from "react-native-elements";
-import { useLoginMutation } from "../../Context/API/AUTH_API";
 import { LoginUser as Loginn } from "../../Context/Data/Auth";
 import { Active, Inactive } from "../../Context/Data/Server";
 import { PaletteStyles } from "../../Style/AppPalette";
 import { useDispatch } from "react-redux";
+import { useVendorLoginMutation } from "../../Context/API/VENDOR_API";
 
-const Login = ({ navigation }: any) => {
-  const [LoginUser, { isLoading }] = useLoginMutation();
+const VendorLogin = ({ navigation }: any) => {
+  const [LoginVendor, { isLoading }] = useVendorLoginMutation();
   const [user, setUser] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const Dispatch = useDispatch();
 
   const UserLogin = () => {
-    LoginUser({
+    LoginVendor({
       user: user.toLowerCase(),
       password: password,
     })
@@ -65,8 +65,7 @@ const Login = ({ navigation }: any) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-        keyboardVerticalOffset={-64}
+        behavior={Platform.OS === "ios" ? "position" : "padding"}
         enabled
         style={[
           {
@@ -76,15 +75,7 @@ const Login = ({ navigation }: any) => {
         ]}
       >
         <View style={{ paddingTop: 5, padding: 12 }}>
-          <Text style={[PaletteStyles.lgTextBoldx2]}>USER LOGIN</Text>
-          {/* <Text
-            style={[
-              PaletteStyles.lgTextLight,
-              { textAlign: "left", justifyContent: "flex-start" },
-            ]}
-          >
-            No hidden fees. No hassles
-          </Text> */}
+          <Text style={[PaletteStyles.lgTextBoldx2]}>VENDOR LOGIN</Text>
         </View>
 
         <View
@@ -137,7 +128,7 @@ const Login = ({ navigation }: any) => {
             style={PaletteStyles.inputField}
             secureTextEntry
             placeholder="password"
-            // onSubmitEditing={UserLogin}
+            onSubmitEditing={UserLogin}
             placeholderTextColor={PaletteStyles.darkMode.backgroundColor}
             onChangeText={(text) => setPassword(text)}
           />
@@ -165,7 +156,7 @@ const Login = ({ navigation }: any) => {
                 },
               ]}
             >
-              Log in
+              Login
             </Text>
           )}
         </TouchableOpacity>
@@ -173,14 +164,14 @@ const Login = ({ navigation }: any) => {
 
       <View style={{flexDirection: "row", alignSelf: "center", justifyContent: "center" }}>
       <Text style={[
-          PaletteStyles.smTextBold,{ color: PaletteStyles.darkMode.color}]}>VENDOR
+          PaletteStyles.smTextBold,{ color: PaletteStyles.darkMode.color}]}>USER
       </Text>
       <Text
         style={[
           PaletteStyles.smTextBold,
           { color: PaletteStyles.colorScheme1.color },
         ]}
-        onPress={() => navigation.navigate("VendorLogin")}
+        onPress={() => navigation.navigate("Login")}
       > 
         Login here
       </Text>
@@ -190,7 +181,7 @@ const Login = ({ navigation }: any) => {
   );
 };
 
-export default Login;
+export default VendorLogin;
 
 const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "space-evenly" },

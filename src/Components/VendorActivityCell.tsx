@@ -1,33 +1,25 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { VendorListData } from "../utils/schemas/Types";
-import { PaletteStyles } from "../Style/AppPalette";
+import { wasteBinData } from "../utils/schemas/Types";
+import {PaletteStyles} from "../Style/AppPalette";
 import { Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
 import { SelectedVendor } from "../Context/Data/Vendor";
 import { RootState } from "../Context/Store";
 
-const VendorCell = ({
+const VActivity = ({
   item,
   index,
+  navigation,
 }: {
-  item: VendorListData;
+  item: wasteBinData;
   index: number;
+  navigation: any
 }) => {
   const Dispatch = useDispatch();
   const { selectedVendor } = useSelector((state: RootState) => state.Vendor);
 
-  const selectVendor = ({
-    id,
-    vendor,
-    vendorTel,
-    vendorEmail,
-  }: {
-    id: string;
-    vendor: string;
-    vendorTel: string;
-    vendorEmail: string;
-  }) => {
+  const selectVendor = ({ id, vendor }: { id: string; vendor: string }) => {
     Alert.alert(
       "Select Vendor",
       `You're about to select ${vendor.toLocaleUpperCase()} to fulfil this request. Confirm?`,
@@ -36,8 +28,7 @@ const VendorCell = ({
         {
           text: "Yes",
           onPress: () =>
-            Dispatch(SelectedVendor({ id: id, vendor: vendor.toUpperCase(), vendorTel: vendorTel,
-              vendorEmail: vendorEmail  })),
+            Dispatch(SelectedVendor({ id: id, vendor: vendor.toUpperCase() })),
         },
       ]
     );
@@ -49,20 +40,16 @@ const VendorCell = ({
       style={[
         PaletteStyles.viewBox,
         {
-          backgroundColor: PaletteStyles.darkMode.color,
-          borderWidth: selectedVendor.id == item?._id ? 2 : 0,
-          borderColor: PaletteStyles.colorScheme1.color,
+          backgroundColor: "#fff",
           padding: PaletteStyles.vSpacing.marginVertical,
         },
       ]}
-      onPress={() =>
-        selectVendor({
-          id: item?._id,
-          vendor: item?.companyName,
-          vendorTel: item?.phoneNumber,
-          vendorEmail: item?.email,
-        })
-      }
+      onPress={() => navigation.navigate("ActivityDetails",
+        {
+          screen: "ActivityDetails",
+          params: item
+        })}
+      // selectVendor({ id: item?._id, vendor: item?.companyName })
     >
       <Text
         style={[
@@ -70,7 +57,7 @@ const VendorCell = ({
           { color: PaletteStyles.darkMode.backgroundColor },
         ]}
       >
-        {item?.companyName.toLocaleUpperCase()}
+        {item?.address.toLocaleUpperCase()}
       </Text>
 
       <View
@@ -140,10 +127,12 @@ const VendorCell = ({
           {item?.phoneNumber}
         </Text>
       </View>
+
+      <Text>{item.CompletionStatus}</Text>
     </TouchableOpacity>
   );
 };
 
-export default VendorCell;
+export default VActivity;
 
 const styles = StyleSheet.create({});

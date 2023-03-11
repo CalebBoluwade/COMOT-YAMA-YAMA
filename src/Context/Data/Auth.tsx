@@ -1,25 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {} from "../../Utils/Schemas/Types";
-
-enum userSet {
-  "USER" = "USER",
-  "VENDOR" = "VENDOR",
-  "ADMIN" = "ADMIN",
-}
+import {customerStatus, UserSet} from "../../Utils/Schemas/Types";
 
 type userState = {
   isUserAuth: boolean;
   userData: {
     __v: 0;
     _id: string;
+    companyName: string;
     email: string;
     fullName: string;
-    password: "";
-    userType: userSet;
+    userType: UserSet;
     phoneNumber: string;
+    status: customerStatus;
+    vendorStatus: customerStatus;
     address: string | null;
-  };
-  user_type: userSet;
+  },
+  accessToken: string;
 };
 
 const initialState: userState = {
@@ -27,14 +23,16 @@ const initialState: userState = {
   userData: {
     __v: 0,
     _id: "",
+    companyName: "",
     email: "",
     fullName: "",
-    password: "",
-    userType: userSet["USER"],
+    userType: UserSet["USER"],
     phoneNumber: "",
+    status: customerStatus["PENDING"],
+    vendorStatus: customerStatus["PENDING"],
     address: null
   },
-  user_type: userSet["USER"],
+  accessToken: ""
 };
 
 const AuthSlice = createSlice({
@@ -42,15 +40,18 @@ const AuthSlice = createSlice({
   initialState,
   reducers: {
     LoginUser: (state, { payload }) => {
-      state.userData = payload;
-      state.user_type = payload?.userType;
+      state.userData = payload.data;
       state.isUserAuth = true;
+      state.accessToken = payload.accessToken;
     },
     LogOutUser: (state = initialState) => {
       return initialState;
     },
+    AddAddress: (state, {payload}) => {
+      state.userData.address = payload
+    }
   },
 });
 
-export const { LoginUser, LogOutUser } = AuthSlice.actions;
+export const { LoginUser, LogOutUser,AddAddress } = AuthSlice.actions;
 export default AuthSlice.reducer;
