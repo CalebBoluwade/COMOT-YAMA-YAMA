@@ -90,7 +90,7 @@ const RegisterUser = ({ navigation }: any) => {
 
       <KeyboardAvoidingView
       keyboardVerticalOffset={50}
-        // behavior={Platform.OS === "ios" ? "position" : "padding"}
+        behavior={"position"}
         enabled
         style={[PaletteStyles.styleContainer, {paddingTop: 10, overflow: "scroll"}]}
       >

@@ -4,21 +4,36 @@ import {
   View,
   AppState,
   TouchableOpacity,
-  Animated,
-  FlatList,
+  // Animated,
+  // FlatList,
   Image,
-  ScrollView,
+  ScrollView,TouchableWithoutFeedback
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../Context/Store";
 import { PaletteStyles } from "../Style/AppPalette";
-import { useServerStatusQuery } from "../Context/API/AUTH_API";
-import { initData } from "../Context/Data/Server";
+// import { useServerStatusQuery } from "../Context/API/AUTH_API";
+// import { initData } from "../Context/Data/Server";
+import { Active, Inactive } from "../Context/Data/Server";
 import UserIcon from "../Components/UserIcon";
 import { Icon } from "react-native-elements";
+import * as Location from "expo-location";
 
 const Initial = ({ navigation }: any) => {
+  const Dispatch = useDispatch();
+  useEffect(() => {
+    const GetUserLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        Dispatch(
+          Inactive({ message: "Permission to access location was denied" })
+        );
+      }
+    }
+    GetUserLocation()
+      // return GetUserLocation
+    }, [])
   const appState = useRef(AppState.currentState);
   const [idleTime, setIdleTime] = useState(0);
 
@@ -231,10 +246,7 @@ const Initial = ({ navigation }: any) => {
               PaletteStyles.button,
               PaletteStyles.gridBox,
             ]}
-            onPress={
-              userData.userType === "USER"
-                ? () => navigation.navigate("UserActivity")
-                : () => navigation.navigate("VendorActivity")
+            onPress={() => navigation.navigate("Activity")
             }
           >
             <Icon
@@ -329,7 +341,7 @@ const Initial = ({ navigation }: any) => {
             <Text style={{ color: PaletteStyles.darkMode.color }}>6</Text>
           </View>
 
-          <View
+           <View
             style={[
               PaletteStyles.viewBox,
               PaletteStyles.button,

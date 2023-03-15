@@ -85,10 +85,10 @@ const TranactionStatus = ({ route, navigation }: any) => {
             >
               {transaction?.type === TranactionType.DEBIT ? "-" : "+"}
 
-              {new Intl.NumberFormat("en-ng", {
+              {/* {new Intl.NumberFormat("en-ng", {
                 style: 'currency',
                 currency: 'NGN'
-                }).format(transaction?.amount)}
+                }).format(transaction?.amount)} */}
             </Text>
 
             <Text style={PaletteStyles.smTextLight}>{transaction?.type === TranactionType.DEBIT ? "plus" : "minus"} charges</Text>

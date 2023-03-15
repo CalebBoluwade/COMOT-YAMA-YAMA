@@ -99,6 +99,7 @@ export const PaletteStyles = StyleSheet.create({
     fontWeight: "900",
     letterSpacing: 2,
     color: darkMode ? "#FFF" : "#000",
+    fontFamily: "Poppins-Bold"
   },
   lgTextBold: {
     fontSize: 25,
@@ -129,6 +130,7 @@ export const PaletteStyles = StyleSheet.create({
     color: darkMode ? "#FFF" : "#000",
     fontSize: 21,
     // fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Bold",
     letterSpacing: 5,
     fontWeight: "700",
     marginVertical: 8,
@@ -138,6 +140,7 @@ export const PaletteStyles = StyleSheet.create({
     color: darkMode ? "#FFF" : "#000",
     fontSize: 21,
     // fontFamily: "Poppins-SemiBold",
+    fontFamily: "Poppins-Bold",
     // letterSpacing: 5,
     fontWeight: "900",
     // textAlign: "center",
@@ -171,7 +174,7 @@ export const PaletteStyles = StyleSheet.create({
     width: "92%",
   },
   button: {
-    borderRadius: 42,
+    borderRadius: 12,
     padding: 18,
     backgroundColor: "#3f86cf4f",
     shadowOpacity: 0.21,

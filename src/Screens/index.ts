@@ -15,15 +15,17 @@ import UserRouting from "./Auth/UserRouting";
 import DisposeRecycle from "./User/DisposeRecycle";
 import VendorList from "./Vendor/VendorList";
 import VendorRegistration from "./Vendor/VendorSignUp";
-import VendorActivityPage from "./Vendor/VendorActivityPage";
-import UserActivityPage from "./User/UserActivityPage";
-import UserActivityDetails from "./User/UserActivityDetails";
+
+import ActivityItems from "../Components/ActivityItems";
+import ActivityPage from "../Components/ActivityPage";
+import ActivityDetails from "../Components/ActivityDetails";
+
 export {
-  UserActivityDetails,
-  UserActivityPage,
+  ActivityDetails,
+  ActivityItems,
+  ActivityPage,
   VendorRegistration,
   VendorList,
-  VendorActivityPage,
   Initial,
   QR,
   Maps,

@@ -1,6 +1,5 @@
 import {
   StyleSheet,
-  TextInput,
   View,
   Text,
   Alert,
@@ -25,8 +24,8 @@ import { useNavigation } from "@react-navigation/native";
 import { UserAddress } from "../Context/Data/Vendor";
 import { AddAddress } from "../Context/Data/Auth";
 
-const Maps = ({ navigation }: any) => {
-  // const navigation = useNavigation();
+const Maps = () => {
+  const navigation = useNavigation();
   const { userData } = useSelector((state: RootState) => state.UserData);
   const mapRef = useRef<any>(null);
   const [mapLocale, setLocale] = useState({
@@ -86,12 +85,6 @@ const Maps = ({ navigation }: any) => {
   };
 
   const getUserLocation = async () => {
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") {
-      Dispatch(
-        Inactive({ message: "Permission to access location was denied" })
-      );
-    }
     let location = await Location.getCurrentPositionAsync();
 
     setLocale({

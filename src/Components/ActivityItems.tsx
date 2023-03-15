@@ -8,16 +8,16 @@ import {
   Image,
 } from "react-native";
 import React from "react";
-import { WasteBinData } from "../../utils/schemas/Types";
+import { WasteBinData } from "../utils/schemas/Types";
 import { Icon } from "react-native-elements";
-import { PaletteStyles } from "../../Style/AppPalette";
+import { PaletteStyles } from "../Style/AppPalette";
 
-const UserActivityItem = ({ data, index, navigation }: any) => {
+const ActivityItem = ({ data, index, navigation }: any) => {
   const activity: WasteBinData = data;
 
   return (
-    <TouchableOpacity style={styles.container} key={index} onPress={() => navigation.navigate("Stack", {
-      screen: "UserActivityDetails",
+    <TouchableOpacity style={[styles.container, PaletteStyles.viewBox]} key={index} onPress={() => navigation.navigate("Stack", {
+      screen: "ActivityDetails",
       params: data
     })}>
       <View style={[PaletteStyles.viewBox, styles.TransactionView]}>
@@ -47,7 +47,7 @@ const UserActivityItem = ({ data, index, navigation }: any) => {
   );
 };
 
-export default UserActivityItem;
+export default ActivityItem;
 
 const styles = StyleSheet.create({
   container: {

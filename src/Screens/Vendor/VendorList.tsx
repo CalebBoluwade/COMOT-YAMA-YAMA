@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import React, { useEffect, useState } from "react";
-import {PaletteStyles} from "../../Style/AppPalette";
+import { PaletteStyles } from "../../Style/AppPalette";
 import GoBack from "../../Components/GoBack";
 import { FlashList } from "@shopify/flash-list";
-import VendorCell from "../../Components/VendorCell";
+import VendorCell from "./VendorCell";
 import { VendorListData } from "../../utils/schemas/Types";
 import { SelectList } from "react-native-dropdown-select-list";
 
@@ -41,17 +41,31 @@ const VendorList = ({ route, navigation }: any) => {
 
       <SelectList
         setSelected={(val: any) => setSelected(val)}
-        data={vendorData.map(vendor => vendor.companyName.toLocaleUpperCase())}
+        data={vendorData.map((vendor) =>
+          vendor.companyName.toLocaleUpperCase()
+        )}
         save="value"
         search={true}
         onSelect={() => alert(selected)}
+        placeholder="Select Vendor"
         boxStyles={{
           backgroundColor: PaletteStyles.darkMode.color,
           marginTop: PaletteStyles.vSpacing.marginVertical,
           borderWidth: 2,
           borderColor: PaletteStyles.colorScheme1.color,
+          alignSelf: "center",
+          width: PaletteStyles.Width.width / 1.1,
         }}
-        dropdownStyles={{ backgroundColor: PaletteStyles.darkMode.color }}
+        dropdownStyles={{
+          backgroundColor: PaletteStyles.darkMode.color,
+          alignSelf: "center",
+          position: "absolute",
+          left: 21,
+          right: 0,
+          top: 55,
+          width: PaletteStyles.Width.width / 1.1,
+          zIndex: 5
+        }}
       />
 
       <View style={{ padding: 12 }}>

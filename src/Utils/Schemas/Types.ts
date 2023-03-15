@@ -46,8 +46,9 @@ export interface Vendor {
 }
 
 export interface WasteBinData {
+  _id?: string;
   ownerId: string;
-  address: string|{
+  address: {
     address: string;
     latitude: number;
     longitude: number;
@@ -64,7 +65,7 @@ export interface WasteBinData {
 
 export enum CompletionStatus {
   COMPLETED = 'COMPLETED',
-  PENDING = 'PENDING',
+  INITIATED = 'INITIATED',
   MISSED = 'MISSED',
   CANCELLED = 'CANCELLED',
   DELETED = 'DELETED'
