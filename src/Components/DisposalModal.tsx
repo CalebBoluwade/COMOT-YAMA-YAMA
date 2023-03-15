@@ -4,25 +4,30 @@ import {
   View,
   TouchableOpacity,
   Image,
-  Modal
+  KeyboardAvoidingView,
+  Modal,
 } from "react-native";
 import React from "react";
 import EvilIcons from "react-native-vector-icons/EvilIcons";
+
 import { PaletteStyles } from "../Style/AppPalette";
+import Label from "./Labels";
+import { AddAddress } from "../Context/Data/Auth";
+import { useDispatch } from "react-redux";
 
 const DisposalModal = ({ openModal, setOpenModal }: any) => {
+  const Dispatch = useDispatch();
+  // const completedOnboarding = async () => {
+  //   // await AsyncStorage.setItem("onboarded", JSON.stringify(true)).then(() => {
+  //   //   setOpenModal(false);
 
-  const completedOnboarding = async () => {
-    // await AsyncStorage.setItem("onboarded", JSON.stringify(true)).then(() => {
-    //   setOpenModal(false);
-
-    //   if (Platform.OS === "android") {
-    //     showToast("Completed");
-    //   } else {
-    //     alert("Completed");
-    //   }
-    // });
-  };
+  //   //   if (Platform.OS === "android") {
+  //   //     showToast("Completed");
+  //   //   } else {
+  //   //     alert("Completed");
+  //   //   }
+  //   // });
+  // };
 
   return (
     <Modal
@@ -31,7 +36,7 @@ const DisposalModal = ({ openModal, setOpenModal }: any) => {
       visible={openModal}
       onRequestClose={() => setOpenModal(!openModal)}
     >
-      <View
+      <KeyboardAvoidingView
         style={styles.WelcomeModal}
         //   onPress={() => setOpenModal(!openModal)}
       >
@@ -47,26 +52,34 @@ const DisposalModal = ({ openModal, setOpenModal }: any) => {
           <Text style={{ fontSize: 18, color: "#ccc" }}>Skip</Text>
         </TouchableOpacity>
         {/* <View style={customStyles.modalLine} /> */}
-
-        <Image
-          source={require("../../assets/Recycling-p.png")}
-          style={styles.image}
-          resizeMode="cover"
-        />
-
         <View>
-          <Text style={[PaletteStyles.lgTextBold, {color: PaletteStyles.darkMode.backgroundColor, textAlign: "center"}]}>
+          <Text
+            style={[
+              PaletteStyles.lgTextBold,
+              {
+                color: PaletteStyles.darkMode.backgroundColor,
+                textAlign: "center",
+              },
+            ]}
+          >
             GET STARTED
           </Text>
-          <Text style={[PaletteStyles.smTextLight, {textAlign: "center"}]}>
+          <Text style={[PaletteStyles.smTextLight, { textAlign: "center" }]}>
             Dispose. Recycle. Earn
           </Text>
         </View>
 
+        <Image
+          source={require("../../assets/Recycling-p.png")}
+          style={styles.image}
+          resizeMode="contain"
+          resizeMethod="auto"
+        />
+
         {/* <TouchableOpacity style={[PaletteStyles.button, styles.extraBtn]} >
           <Text style={{ color: "#fff" }}>Continue</Text>
         </TouchableOpacity> */}
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
@@ -75,18 +88,21 @@ export default DisposalModal;
 
 const styles = StyleSheet.create({
   image: {
-    height: 275,
+    height: 245,
     width: "100%",
+    alignItems: "center",
+    marginTop: 25
   },
   WelcomeModal: {
-    width: "75%",
+    width: "95%",
     maxWidth: 300,
     height: 420,
     backgroundColor: "#fff",
     position: "absolute",
     top: "20%",
-    alignItems: "center",
-    justifyContent: "center",
+    padding: 15,
+    // alignItems: "center",
+    // justifyContent: "center",
     alignSelf: "center",
     borderRadius: 21,
     elevation: 3,
@@ -97,8 +113,15 @@ const styles = StyleSheet.create({
       height: 3,
     },
   },
-  extraBtn: {position: "relative", top: 75, borderRadius: 21,borderTopLeftRadius: 0, borderTopRightRadius: 0, shadowOffset: {
-    width: 4,
-    height: -3,
-  },}
+  extraBtn: {
+    position: "relative",
+    top: 75,
+    borderRadius: 21,
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+    shadowOffset: {
+      width: 4,
+      height: -3,
+    },
+  },
 });

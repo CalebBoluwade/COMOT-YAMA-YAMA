@@ -12,7 +12,7 @@ const Label = ({
   showRequired: boolean;
 }) => {
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", margin: 15 }}>
       <Text style={[PaletteStyles.smTextLight, { marginLeft: 8}]}>{title}</Text>
 
       {showRequired ? (
