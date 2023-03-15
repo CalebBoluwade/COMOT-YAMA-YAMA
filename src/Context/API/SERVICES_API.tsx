@@ -8,11 +8,11 @@ export const DisposeRecycleAPI = createApi({
     baseUrl: __DEV__ ? tempUrl : prodUrl,
   }),
   endpoints: (builder) => ({
-    disposalBin: builder.mutation<any, WasteBinData>({
-      query: (payload) => ({
+    disposalBin: builder.mutation<any, {payload: WasteBinData, token: string}>({
+      query: ({payload, token}) => ({
         url: "/dispose/wastebin",
         method: "POST",
-        token: "",
+        token: token,
         data: "",
         body: payload,
         params: null,
@@ -20,7 +20,7 @@ export const DisposeRecycleAPI = createApi({
     }),
     fetchBinMaterials: builder.query<any, { token: string}>({
       query: ({token}) => ({
-        url: "/dispose/materials",
+        url: "/list/bin/items",
         token: token,
         method: "GET",
         data: "",
@@ -28,9 +28,9 @@ export const DisposeRecycleAPI = createApi({
         params: null,
       })
     }),
-    fetchUserBin: builder.query<any, {id: string}>({
-      query: ({id}) => ({
-        url: `/dispose/user/list/${id}`,
+    fetchBin: builder.query<{data:WasteBinData[]}, {id: string, type: string}>({
+      query: ({id, type}) => ({
+        url: `/dispose/list/${type === "USER" ? "user" : "vendor" }/${id}`,
         token: "",
         method: "GET",
         data: "",
@@ -38,13 +38,13 @@ export const DisposeRecycleAPI = createApi({
         params: "",
       }),
     }),
-    fetchVendorBin: builder.query<WasteBinData[], {id: string}>({
-      query: (payload) => ({
-        url: `/dispose/vendor/list/${payload.id}`,
-        token: "",
-        method: "GET",
+    updateBin: builder.mutation<any, {id: string | undefined, status: string, token: string}>({
+      query: ({id, status, token}) => ({
+        url: `/update/bin/${id}`,
+        token: token,
+        method: "PATCH",
         data: "",
-        body: null,
+        body: {status: status},
         params: "",
       }),
     }),
@@ -54,6 +54,6 @@ export const DisposeRecycleAPI = createApi({
 export const {
   useFetchBinMaterialsQuery,
   useDisposalBinMutation,
-  useFetchUserBinQuery,
-  useFetchVendorBinQuery
+  useFetchBinQuery,
+  useUpdateBinMutation
 } = DisposeRecycleAPI;

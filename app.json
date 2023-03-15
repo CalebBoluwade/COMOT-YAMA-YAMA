@@ -2,9 +2,9 @@
   "expo": {
     "name": "COMOT YAMA YAMA",
     "slug": "COMOT-YMA_YAA",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/Logistics.png",
     "userInterfaceStyle": "automatic",
     "scheme": "com.groovetech.comotyamayama",
     "splash": {
@@ -27,12 +27,12 @@
       "package": "com.groovetech.comotyamayama",
       "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/Recycling-p.png",
         "backgroundColor": "#FFFFFF"
       },
       "config": {
         "googleMaps": {
-          "apiKey": "AIzaSyDia3qDtwTkXAyWLbJ45FR9NE4oafJE_RI"
+          "apiKey": "AIzaSyARwk8fNFtc3D-qHecQamjUBMeI0pI5itU"
         }
       }
     },

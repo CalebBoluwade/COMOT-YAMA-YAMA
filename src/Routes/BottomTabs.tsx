@@ -7,8 +7,8 @@ import {
   Profile,
   QR,
   Referral,
-  UserActivityPage,
-  VendorActivityPage,
+  ActivityItems,
+  ActivityPage
 } from "../Screens/index";
 import { Icon } from "react-native-elements";
 let { width, height } = Dimensions.get("screen");
@@ -76,8 +76,8 @@ const BottomTabs = () => {
       />
 
       <Stack.Screen
-        name="UserActivity"
-        component={UserActivityPage}
+        name="Activity"
+        component={ActivityPage}
         options={{}}
       />
 

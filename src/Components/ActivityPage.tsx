@@ -1,20 +1,21 @@
 import { StyleSheet, Text, View, FlatList, SafeAreaView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { PaletteStyles } from "../../Style/AppPalette";
-import GoBack from "../../Components/GoBack";
+import { PaletteStyles } from "../Style/AppPalette";
+import GoBack from "./GoBack";
 import { FlashList } from "@shopify/flash-list";
-import { WasteBinData } from "../../utils/schemas/Types";
+import { WasteBinData } from "../utils/schemas/Types";
 import { useSelector } from "react-redux";
-import { RootState } from "../../Context/Store";
-import VActivity from "../../Components/VendorActivityCell";
-import { useFetchUserBinQuery } from "../../Context/API/SERVICES_API";
-import UserActivityDetails from "./UserActivityDetails";
-import UserActivityItem from "./UserActivityItems";
+import { RootState } from "../Context/Store";
+import {
+  useFetchBinQuery
+} from "../Context/API/SERVICES_API";
+import UserActivityDetails from "./ActivityDetails";
+import UserActivityItem from "./ActivityItems";
 
-const UserActivityPage = ({ route, navigation }: any) => {
+const ActivityPage = ({ route, navigation }: any) => {
   const { userData } = useSelector((state: RootState) => state.UserData);
 
-  const { data, isLoading } = useFetchUserBinQuery({ id: userData._id });
+    const { data, isLoading } = useFetchBinQuery({ id: userData._id, type: userData.userType });
 
   // const activityData: wasteBinData[] = route.params?.data;
   const renderActivityList = ({
@@ -50,18 +51,20 @@ const UserActivityPage = ({ route, navigation }: any) => {
           <FlatList
             renderItem={(item: any) => renderActivityList(item)}
             // estimatedItemSize={5}
-            data={data.data}
+            data={data?.data}
           />
         </View>
       ) : (
         <View style={{ padding: 12, alignSelf: "center" }}>
-         <Text style={[PaletteStyles.lgTextLight, {textAlign: "center"}]}>No data available</Text>
+          <Text style={[PaletteStyles.lgTextLight, { textAlign: "center" }]}>
+            No data available
+          </Text>
         </View>
       )}
     </SafeAreaView>
   );
 };
 
-export default UserActivityPage;
+export default ActivityPage;
 
 const styles = StyleSheet.create({});

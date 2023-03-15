@@ -65,8 +65,8 @@ const Login = ({ navigation }: any) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "height"}
-        keyboardVerticalOffset={-64}
+        behavior={"position"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? -64 : 0}
         enabled
         style={[
           {

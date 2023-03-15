@@ -23,6 +23,7 @@ const Response = () => {
       transparent={true}
       visible={open}
       onRequestClose={() => Dispatch(_NULS())}
+      accessible
     >
       <Animated.View
         style={[
@@ -48,13 +49,13 @@ export default Response;
 
 const styles = StyleSheet.create({
   Modal: {
-    width: "75%",
+    width: "80%",
     // maxHeight: "10%",
     // height: 275,
     backgroundColor: PaletteStyles.darkMode.backgroundColor,
     padding: 8,
     position: "absolute",
-    bottom: 21,
+    top: 21,
     alignSelf: "center",
     justifyContent: "space-around",
     alignItems: "center",

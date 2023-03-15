@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { Platform } from "react-native";
+import UserLocation from "../Components/UserLocation";
 
 import {
   DisposeRecycle,
@@ -9,7 +10,7 @@ import {
   ProfileQR,
   Referral,
   TranactionStatus,
-  UserActivityDetails,
+  ActivityDetails,
   VendorList,
 } from "../Screens/index";
 
@@ -50,8 +51,16 @@ const StackNav = () => {
         />
 
         <Stack.Screen
-          name="UserActivityDetails"
-          component={UserActivityDetails}
+          name="UserLocation2"
+          component={UserLocation}
+          // options={{
+          //   presentation: "modal",
+          // }}
+        />
+
+        <Stack.Screen
+          name="ActivityDetails"
+          component={ActivityDetails}
         />
 
         <Stack.Screen

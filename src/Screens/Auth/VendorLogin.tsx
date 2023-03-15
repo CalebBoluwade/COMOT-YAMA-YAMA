@@ -65,7 +65,7 @@ const VendorLogin = ({ navigation }: any) => {
       />
 
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "position" : "padding"}
+        behavior={"position"}
         enabled
         style={[
           {

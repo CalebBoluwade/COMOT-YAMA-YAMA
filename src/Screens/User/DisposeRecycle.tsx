@@ -3,9 +3,11 @@ import {
   Text,
   View,
   ScrollView,
+  KeyboardAvoidingView,
   TextInput,
   TouchableOpacity,
-  Image,
+  Alert,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { PaletteStyles } from "../../Style/AppPalette";
@@ -34,14 +36,16 @@ import {
 } from "react-native-google-places-autocomplete";
 import DisposalModal from "../../Components/DisposalModal";
 import DisposalResponse from "../../Components/DisposalResponse";
-import { ClearAddress } from "../../Context/Data/Vendor";
+import { ClearAddress, UserAddress } from "../../Context/Data/Vendor";
 import { AddAddress } from "../../Context/Data/Auth";
 
 const DisposeRecycle = ({ navigation }: any) => {
-  const [mapLocation, setLocation] = useState<Point>();
-  const [mapLocationDesc, setLocationDesc] = useState<string>("");
+  const [mapLocation, setMapLocation] = useState({
+    address: "",
+    latitude: 0,
+    longitude: 0,
+  });
 
-  const [address, setAddress] = useState("");
   const [pickupDate, setPickupDate] = useState<number>(0);
   const [halfBag, setHalfBag] = useState(false);
   const [wasteBags, setWasteBags] = useState<number>(0);
@@ -51,6 +55,50 @@ const DisposeRecycle = ({ navigation }: any) => {
 
   const [openModal, setOpenModal] = useState(true);
   const [disabledDate, setDisabledDate] = useState(true);
+
+  const setUserAddress = (): void => {
+    // if (mapLocationDesc) {
+    Dispatch(
+      UserAddress({
+        address: mapLocation.address,
+        latitude: mapLocation.latitude,
+        longitude: mapLocation.longitude,
+      })
+    );
+
+    if (!userData?.address) {
+      Alert.alert(
+        "Add address to account",
+        "Would you like this your primary address?",
+        [
+          { text: "No", onPress: () => null },
+          {
+            text: "Yes",
+            onPress: () => {
+              Dispatch(
+                AddAddress({
+                  address: mapLocation.address,
+                  latitude: mapLocation.latitude,
+                  longitude: mapLocation.longitude,
+                })
+              );
+              Dispatch(Active({ message: "Address added to Profile" }));
+              navigation.goBack();
+            },
+          },
+        ],
+        {}
+      );
+    } else {
+      Dispatch(Active({ message: "Address added successfully" }));
+      navigation.goBack();
+    }
+    // } else {
+    //   Dispatch(Inactive({message: "use the search bar to find address"}))
+    // }
+
+    // Dispatch(Active({ message: "Address added successfully" }));
+  };
 
   const { data, isLoading, isError } = useGetAvailableVendorsQuery();
   const [DisposalBin] = useDisposalBinMutation();
@@ -62,9 +110,7 @@ const DisposeRecycle = ({ navigation }: any) => {
   const { userData, accessToken } = useSelector(
     (state: RootState) => state.UserData
   );
-  const { selectedVendor, location } = useSelector(
-    (state: RootState) => state.Vendor
-  );
+  const { selectedVendor } = useSelector((state: RootState) => state.Vendor);
 
   const materialsData = useFetchBinMaterialsQuery({
     token: accessToken,
@@ -115,19 +161,22 @@ const DisposeRecycle = ({ navigation }: any) => {
   const SubmitBin = () => {
     // console.log(address, wasteBags, pickupDate, selected);
 
-    if (!location.latitude || !wasteBags || selected.length < 1) {
+    if (!mapLocation.latitude || !wasteBags || selected.length < 1) {
       Dispatch(Inactive({ message: "Fill all required fields" }));
     } else {
       DisposalBin({
-        address: address,
-        ownerId: userData._id,
-        imageDescription: imageDescription ? imageDescription : null,
-        phoneNumber: userData.phoneNumber,
-        wasteBags: halfBag ? wasteBags + 0.5 : wasteBags,
-        wasteMaterials: selected,
-        vendor: selectedVendor,
-        // pickupDate: Number(pickupDate),
-        pickupDate: Date.now(),
+        payload: {
+          address: mapLocation,
+          ownerId: userData._id,
+          imageDescription: imageDescription ? imageDescription : null,
+          phoneNumber: userData.phoneNumber,
+          wasteBags: halfBag ? wasteBags + 0.5 : wasteBags,
+          wasteMaterials: selected,
+          vendor: selectedVendor,
+          // pickupDate: Number(pickupDate),
+          pickupDate: Date.now(),
+        },
+        token: accessToken,
       })
         .unwrap()
         .then((data) => {
@@ -151,15 +200,19 @@ const DisposeRecycle = ({ navigation }: any) => {
 
   return (
     <ScrollView
-      showsVerticalScrollIndicator={false}
+      // behavior={"position"}
+      // keyboardVerticalOffset={Platform.OS === "ios" ? -64 : 0}
+      // enabled
       style={[
         PaletteStyles.container,
         {
           backgroundColor: PaletteStyles.darkMode.backgroundColor,
           padding: 18,
           // marginTop: 30,
-          paddingTop: 30,
-          paddingBottom: 120,
+          overflow: "scroll",
+          marginTop: 30,
+          // marginBottom: 320,
+          height: "100%",
         },
       ]}
     >
@@ -193,6 +246,36 @@ const DisposeRecycle = ({ navigation }: any) => {
           marginTop: PaletteStyles.vSpacing.marginVertical + 10,
         }}
       >
+        <View
+          style={{
+            margin: 8,
+            marginBottom: 15,
+            width: PaletteStyles.Width.width / 1.1,
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Text
+            style={[
+              PaletteStyles.smTextLight,
+              { textAlign: "left", justifyContent: "flex-start" },
+            ]}
+          >
+            {mapLocation?.address || "No address selected"}
+          </Text>
+          {/* 
+          {mapLocation.address ? (
+            <TouchableOpacity onPress={() => Dispatch(ClearAddress())}>
+              <Icon
+                name="close"
+                size={25}
+                color={PaletteStyles.darkMode.color}
+              />
+            </TouchableOpacity>
+          ) : null} */}
+        </View>
+
         <Label
           title="Address (Waste pickup location)?"
           isRequired={true}
@@ -201,14 +284,18 @@ const DisposeRecycle = ({ navigation }: any) => {
 
         <GooglePlacesAutocomplete
           query={{
-            key: "AIzaSyDia3qDtwTkXAyWLbJ45FR9NE4oafJE_RI",
+            key: "AIzaSyARwk8fNFtc3D-qHecQamjUBMeI0pI5itU",
             language: "en",
           }}
           styles={{
             textInput: {
-              fontSize: 18,
-              backgroundColor: PaletteStyles.darkMode.color,
-              color: PaletteStyles.darkMode.backgroundColor,
+              fontSize: 16,
+              padding: 8,
+              borderWidth: 2,
+              borderColor: PaletteStyles.colorScheme1.color,
+              backgroundColor: "#FFF",
+              // backgroundColor: PaletteStyles.darkMode.backgroundColor,
+              color: "#000",
               textAlign: "left",
             },
             textInputContainer: {
@@ -220,14 +307,12 @@ const DisposeRecycle = ({ navigation }: any) => {
             },
           }}
           onPress={(data, details = null) => {
-            Dispatch(
-              AddAddress({
-                address: data.description,
-                latitude: details?.geometry.location.lat,
-                longitude: details?.geometry.location.lng,
-              })
-            );
-            Dispatch(Active({ message: "Address added to Profile" }));
+            // console.log(data);
+            setMapLocation({
+              address: data.description,
+              latitude: Number(details?.geometry.location.lat),
+              longitude: Number(details?.geometry.location.lng),
+            });
           }}
           enableHighAccuracyLocation
           fetchDetails={true}
@@ -237,6 +322,16 @@ const DisposeRecycle = ({ navigation }: any) => {
           nearbyPlacesAPI="GooglePlacesSearch"
           debounce={400}
         />
+
+        {/* <TouchableOpacity
+          style={[
+            PaletteStyles.button,
+            { width: "90%", marginTop: 7, alignSelf: "center" },
+          ]}
+          onPress={setUserAddress}
+        >
+          <Text style={PaletteStyles.colorScheme1}>Use Current Address</Text>
+        </TouchableOpacity> */}
 
         <View
           style={{
@@ -251,72 +346,33 @@ const DisposeRecycle = ({ navigation }: any) => {
             type="entypo"
             color={PaletteStyles.colorScheme1.color}
           /> */}
-
-          {location.latitude ? (
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginTop: 8,
-                width: PaletteStyles.Width.width / 1.1,
-              }}
-            >
-              <Text
-                style={[
-                  PaletteStyles.smTextLight,
-                  PaletteStyles.colorScheme1,
-                  { marginLeft: 12 },
-                ]}
-              >
-                LOCATION ADDED
-              </Text>
-
-              <TouchableOpacity onPress={() => Dispatch(ClearAddress())}>
-                <Icon
-                  name="close"
-                  size={25}
-                  color={PaletteStyles.darkMode.color}
-                />
-              </TouchableOpacity>
-            </View>
-          ) : (
-            <TouchableOpacity
-              onPress={() => navigation.navigate("UserLocation")}
-            >
-              <Text
-                style={[
-                  PaletteStyles.smTextLight,
-                  PaletteStyles.colorScheme1,
-                  { marginLeft: 12 },
-                ]}
-              >
-                FIND LOCATION
-              </Text>
-            </TouchableOpacity>
-          )}
         </View>
       </View>
 
-      <View
-        style={{
-          marginTop: PaletteStyles.vSpacing.marginVertical,
-        }}
+      <KeyboardAvoidingView
+        behavior={"position"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? -64 : 0}
+        enabled
       >
-        <Label
-          title="Specify No. of Waste Bag(s)"
-          isRequired={true}
-          showRequired={true}
-        />
-
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
+            marginTop: PaletteStyles.vSpacing.marginVertical,
           }}
         >
-          {/* <Icon
+          <Label
+            title="Specify No. of Waste Bag(s)"
+            isRequired={true}
+            showRequired={true}
+          />
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            {/* <Icon
             name="shopping-bag"
             size={25}
             reverse
@@ -324,49 +380,52 @@ const DisposeRecycle = ({ navigation }: any) => {
             color={PaletteStyles.colorScheme1.color}
           /> */}
 
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              // justifyContent: "flex-end",
-              paddingLeft: 5,
-              width: "90%",
-            }}
-          >
-            <TextInput
-              selectionColor={PaletteStyles.colorScheme1.color}
-              autoCorrect={false}
-              keyboardType="number-pad"
-              style={[
-                PaletteStyles.inputField,
-                {
-                  width: "30%",
-                  backgroundColor: PaletteStyles.darkMode.color,
-                  borderRadius: 12,
-                },
-              ]}
-              placeholder="Waste Bags"
-              placeholderTextColor={"#CCC"}
-              onChangeText={(text) => setWasteBags(Number(text))}
-            />
-
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "space-between",
+                // justifyContent: "flex-end",
+                paddingLeft: 5,
+                width: "90%",
               }}
             >
-              <Checkbox
-                style={styles.checkbox}
-                value={halfBag}
-                onValueChange={() => setHalfBag(!halfBag)}
+              <TextInput
+                selectionColor={PaletteStyles.colorScheme1.color}
+                autoCorrect={false}
+                keyboardType="number-pad"
+                maxLength={2}
+                style={[
+                  PaletteStyles.inputField,
+                  {
+                    width: "30%",
+                    borderWidth: 2,
+                    borderColor: PaletteStyles.colorScheme1.color,
+                    backgroundColor: "#FFF",
+                    borderRadius: 12,
+                  },
+                ]}
+                placeholder="Waste Bags"
+                placeholderTextColor={"#CCC"}
+                onChangeText={(text) => setWasteBags(Number(text))}
               />
 
-              <Text style={PaletteStyles.smTextLight}>Half</Text>
-            </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Checkbox
+                  style={styles.checkbox}
+                  value={halfBag}
+                  onValueChange={() => setHalfBag(!halfBag)}
+                />
 
-            {/* <View
+                <Text style={PaletteStyles.smTextLight}>Half</Text>
+              </View>
+
+              {/* <View
               style={{
                 position: "relative",
                 left: PaletteStyles.Width.width - 250,
@@ -379,29 +438,29 @@ const DisposeRecycle = ({ navigation }: any) => {
                 color={PaletteStyles.colorScheme1.color}
               />
             </View> */}
+            </View>
           </View>
         </View>
-      </View>
-
-      <View
-        style={{
-          marginTop: PaletteStyles.vSpacing.marginVertical,
-        }}
-      >
-        <Label
-          title="Select Waste material(s)"
-          isRequired={true}
-          showRequired={true}
-        />
 
         <View
           style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "center",
+            marginTop: PaletteStyles.vSpacing.marginVertical,
           }}
         >
-          {/* <Icon
+          <Label
+            title="Select Waste material(s)"
+            isRequired={true}
+            showRequired={true}
+          />
+
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {/* <Icon
             name="cart-arrow-down"
             size={25}
             reverse
@@ -409,40 +468,40 @@ const DisposeRecycle = ({ navigation }: any) => {
             color={PaletteStyles.colorScheme1.color}
           /> */}
 
-          {!materialsData.isLoading ? (
-            <MultipleSelectList
-              setSelected={(val: any) => setSelected(val)}
-              data={materialsData.data?.data}
-              save="value"
-              search={false}
-              // onSelect={() => handleSelection(selected)}
-              placeholder={
-                materialsData.isLoading
-                  ? "loading..."
-                  : "Select Waste Materials"
-              }
-              label="Waste Materials"
-              boxStyles={{
-                backgroundColor: PaletteStyles.darkMode.color,
-                borderWidth: 2,
-                borderColor: PaletteStyles.colorScheme1.color,
-                width: PaletteStyles.Width.width / 1.1,
-                marginTop: 8
-              }}
-              dropdownStyles={{ backgroundColor: PaletteStyles.darkMode.color }}
-            />
-          ) : (
-            <Text>Fetching Waste Materials</Text>
-          )}
+            {!materialsData.isLoading ? (
+              <MultipleSelectList
+                setSelected={(val: any) => setSelected(val)}
+                data={materialsData.data?.data}
+                save="value"
+                search={false}
+                // onSelect={() => handleSelection(selected)}
+                placeholder={
+                  materialsData.isLoading
+                    ? "loading..."
+                    : "Select Waste Materials"
+                }
+                label="Waste Materials"
+                boxStyles={{
+                  backgroundColor: "#FFF",
+                  borderWidth: 2,
+                  borderColor: PaletteStyles.colorScheme1.color,
+                  width: PaletteStyles.Width.width / 1.1,
+                  marginTop: 8,
+                }}
+                dropdownStyles={{ backgroundColor: "#fff" }}
+              />
+            ) : (
+              <Text>Fetching Waste Materials</Text>
+            )}
+          </View>
         </View>
-      </View>
 
-      <View
-        style={{
-          padding: 12,
-        }}
-      >
-        {/* <Label
+        <View
+          style={{
+            padding: 12,
+          }}
+        >
+          {/* <Label
           title="Select Pickup Date"
           isRequired={true}
           showRequired={true}
@@ -465,63 +524,65 @@ const DisposeRecycle = ({ navigation }: any) => {
             disabled={disabledDate}
           />
         </TouchableOpacity> */}
-      </View>
+        </View>
 
-      <View
-        style={{
-          padding: 12,
-          // marginTop: PaletteStyles.vSpacing.marginVertical,
-        }}
-      >
-        <Label
-          title="Add Image Description"
-          isRequired={false}
-          showRequired={true}
-        />
+        <View
+          style={{
+            padding: 12,
+            // marginTop: PaletteStyles.vSpacing.marginVertical,
+          }}
+        >
+          <Label
+            title="Add Image Description"
+            isRequired={false}
+            showRequired={true}
+          />
 
-        <TouchableOpacity style={PaletteStyles.button} onPress={pickImage}>
-          <Text
-            style={
-              imageDescription
-                ? PaletteStyles.colorScheme1
-                : PaletteStyles.smTextLight
-            }
+          <TouchableOpacity style={PaletteStyles.button} onPress={pickImage}>
+            <Text
+              style={
+                imageDescription
+                  ? PaletteStyles.colorScheme1
+                  : PaletteStyles.smTextLight
+              }
+            >
+              {imageDescription ? "Image Selected" : "Select Image"}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
+          style={{
+            padding: 12,
+            // marginTop: PaletteStyles.vSpacing.marginVertical,
+          }}
+        >
+          <Label title="Select Vendor" isRequired={true} showRequired={true} />
+
+          <TouchableOpacity
+            style={PaletteStyles.button}
+            onPress={() => FetchVendors()}
           >
-            {imageDescription ? "Image Selected" : "Select Image"}
-          </Text>
-        </TouchableOpacity>
-      </View>
-
-      <View
-        style={{
-          padding: 12,
-          // marginTop: PaletteStyles.vSpacing.marginVertical,
-        }}
-      >
-        <Label title="Select Vendor" isRequired={true} showRequired={true} />
+            <Text
+              style={
+                selectedVendor.id
+                  ? PaletteStyles.colorScheme1
+                  : PaletteStyles.smTextLight
+              }
+            >
+              {selectedVendor.vendor.toString() || "Select Vendor"}
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           style={PaletteStyles.button}
-          onPress={() => FetchVendors()}
+          onPress={() => SubmitBin()}
         >
-          <Text
-            style={
-              selectedVendor.id
-                ? PaletteStyles.colorScheme1
-                : PaletteStyles.smTextLight
-            }
-          >
-            {selectedVendor.vendor.toString() || "Select Vendor"}
-          </Text>
+          <Text style={PaletteStyles.colorScheme1}>Submit Request</Text>
         </TouchableOpacity>
-      </View>
+      </KeyboardAvoidingView>
 
-      <TouchableOpacity
-        style={PaletteStyles.button}
-        onPress={() => SubmitBin()}
-      >
-        <Text style={PaletteStyles.colorScheme1}>Submit Request</Text>
-      </TouchableOpacity>
       {/* <DisposalResponse
         openModal={openDisposalResponse}
         setOpenModal={setDisposalResponse}

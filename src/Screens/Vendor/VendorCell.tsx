@@ -1,11 +1,12 @@
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
-import { VendorListData } from "../utils/schemas/Types";
-import {PaletteStyles} from "../Style/AppPalette";
+import { VendorListData } from "../../utils/schemas/Types";
+import { PaletteStyles } from "../../Style/AppPalette";
 import { Icon } from "react-native-elements";
 import { useDispatch, useSelector } from "react-redux";
-import { SelectedVendor } from "../Context/Data/Vendor";
-import { RootState } from "../Context/Store";
+import { SelectedVendor } from "../../Context/Data/Vendor";
+import { RootState } from "../../Context/Store";
+import { useNavigation } from "@react-navigation/native";
 
 const VendorCell = ({
   item,
@@ -14,10 +15,21 @@ const VendorCell = ({
   item: VendorListData;
   index: number;
 }) => {
+  const navigation = useNavigation();
   const Dispatch = useDispatch();
   const { selectedVendor } = useSelector((state: RootState) => state.Vendor);
 
-  const selectVendor = ({ id, vendor }: { id: string; vendor: string }) => {
+  const selectVendor = ({
+    id,
+    vendor,
+    vendorTel,
+    vendorEmail,
+  }: {
+    id: string;
+    vendor: string;
+    vendorTel: string;
+    vendorEmail: string;
+  }) => {
     Alert.alert(
       "Select Vendor",
       `You're about to select ${vendor.toLocaleUpperCase()} to fulfil this request. Confirm?`,
@@ -25,8 +37,19 @@ const VendorCell = ({
         { text: "No", onPress: () => null },
         {
           text: "Yes",
-          onPress: () =>
-            Dispatch(SelectedVendor({ id: id, vendor: vendor.toUpperCase() })),
+          onPress: () => {
+            Dispatch(
+              SelectedVendor({
+                id: id,
+                vendor: vendor.toUpperCase(),
+                vendorTel: vendorTel,
+                vendorEmail: vendorEmail,
+              })
+            );
+            setTimeout(() => {
+              navigation.goBack();
+            }, 2000);
+          },
         },
       ]
     );
@@ -38,13 +61,22 @@ const VendorCell = ({
       style={[
         PaletteStyles.viewBox,
         {
-          backgroundColor: "#fff",
+          backgroundColor: PaletteStyles.darkMode.color,
           borderWidth: selectedVendor.id == item?._id ? 2 : 0,
           borderColor: PaletteStyles.colorScheme1.color,
           padding: PaletteStyles.vSpacing.marginVertical,
+          width: PaletteStyles.Width.width / 1.1,
+          alignSelf: "center",
         },
       ]}
-      onPress={() => selectVendor({ id: item?._id, vendor: item?.companyName })}
+      onPress={() =>
+        selectVendor({
+          id: item?._id,
+          vendor: item?.companyName,
+          vendorTel: item?.phoneNumber,
+          vendorEmail: item?.email,
+        })
+      }
     >
       <Text
         style={[
