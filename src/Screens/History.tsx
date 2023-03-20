@@ -41,7 +41,7 @@ const History = ({navigation}: any) => {
         //   padding: PaletteStyles.vSpacing.marginVertical,
         }}
       >
-        <GoBack navigation={navigation} />
+        <GoBack/>
 
         <View>
           <Text style={PaletteStyles.lgTextBold}>Transactions</Text>

@@ -10,8 +10,21 @@ import { useFonts } from "expo-font";
 import { AppTheme, PaletteStyles } from "./src/Style/AppPalette";
 import PushNotification from "./src/Components/PushNotification";
 import "react-native-gesture-handler";
+import Updates from 'expo-updates';
+
+// Check for updates on app start
 
 export default function App() {
+  Updates.checkForUpdateAsync().then(update => {
+    if (update.isAvailable) {
+      // Prompt the user to update
+      Updates.fetchUpdateAsync().then(() => {
+        // Reload the app
+        Updates.reloadAsync();
+      });
+    }
+  });
+  
   const [fontsLoaded] = useFonts({
     "Poppins-Bold": require("./assets/Fonts/Poppins-Bold.ttf"),
   });

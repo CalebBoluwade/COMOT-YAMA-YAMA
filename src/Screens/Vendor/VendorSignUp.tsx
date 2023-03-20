@@ -8,7 +8,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
-import {PaletteStyles} from "../../Style/AppPalette";
+import { PaletteStyles } from "../../Style/AppPalette";
 import { Active, Inactive } from "../../Context/Data/Server";
 import { useDispatch } from "react-redux";
 import { Icon } from "react-native-elements";
@@ -40,23 +40,19 @@ const VendorRegistration = ({ navigation }: any) => {
         .unwrap()
         .then((data) => {
           // Dispatch(Loginn(data?.existingUser));
-          navigation.navigate("Login");
+          navigation.navigate("VendorLogin");
           Dispatch(Active({ message: "Sucessful" }));
         })
         .catch((err) => {
-            console.log(err)
-          Dispatch(
-            Inactive({
-              message: err?.data[0]?.message || err.data || "Server error",
-            })
-          );
+          console.log(err, err?.data.message);
+          Dispatch(Inactive({ message: err?.message || err?.data?.message || "Unknown error" }));
         });
     } else {
-        Dispatch(
-            Inactive({
-              message: "Accept T & C's",
-            })
-          );
+      Dispatch(
+        Inactive({
+          message: "Accept T & C's",
+        })
+      );
     }
   };
 
@@ -94,7 +90,7 @@ const VendorRegistration = ({ navigation }: any) => {
             keyboardType="name-phone-pad"
             placeholderTextColor={"#CCC"}
             style={[PaletteStyles.inputField, { width: "90%" }]}
-            placeholder="company short name"
+            placeholder="Company Name"
             onChangeText={(text) => setName(text)}
           />
         </View>
@@ -154,6 +150,7 @@ const VendorRegistration = ({ navigation }: any) => {
             style={PaletteStyles.inputField}
             placeholder="email-address"
             onChangeText={(text) => setEmail(text)}
+            // onSubmitEditing={() => {}}
           />
         </View>
 

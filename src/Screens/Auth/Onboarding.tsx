@@ -24,17 +24,17 @@ const Onboarding = ({navigation}: any) => {
     {
       id: 1,
       text: "COMOT YAMA YAMA from your Domot without hassle.",
-      img: require("../../../assets/WasteMgmt.png"),
+      img: require("../../../assets/Waste.png"),
     },
     {
       id: 2,
       text: "Quick and Automated Payments.",
-      img: require("../../../assets/WasteMgmt.png"),
+      img: require("../../../assets/Invoice.png"),
     },
     {
       id: 3,
       text: "Easy Access To Transaction History at any time",
-      img: require("../../../assets/WasteMgmt.png"),
+      img: require("../../../assets/time.png"),
     },
   ];
 
@@ -51,9 +51,9 @@ const Onboarding = ({navigation}: any) => {
   const renderBoardSlides = ({ item, index }: any) => {
     return (
       <View style={styles.onBoard}>
-        {/* <Image source={item.img} resizeMode="contain" style={{ height: "70%"}} /> */}
+        <Image source={item.img} resizeMode="contain" style={{ height: Platform.OS === "ios" ? "70%" : "50%"}} />
 
-        <Text style={PaletteStyles.main}>{item.text}</Text>
+        <Text style={[PaletteStyles.lgTextBold, {color: PaletteStyles.colorScheme1.color, textAlign: "center"}]}>{item.text}</Text>
       </View>
     );
   };
@@ -82,7 +82,7 @@ const Onboarding = ({navigation}: any) => {
       </Animated.View>
 
       { isVisible && index === imageArray.length - 1 ?
-      <TouchableOpacity style={{ position: "absolute", bottom: 18, marginBottom: 10 }} onPress={() => navigation.navigate("UserRouting")}>
+      <TouchableOpacity style={{ position: "absolute", bottom: 12, marginBottom: 10 }} onPress={() => navigation.navigate("UserRouting")}>
       <Text style={[PaletteStyles.lgTextBold, PaletteStyles.colorScheme1]}>Continue</Text>
       </TouchableOpacity> : null
       }

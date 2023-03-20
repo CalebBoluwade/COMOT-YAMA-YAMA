@@ -32,7 +32,7 @@ const UserActivityDetails = ({ route }: any) => {
           margin: 12,
         }}
       >
-        <GoBack navigation={navigation} />
+        <GoBack />
 
         <TouchableOpacity onPress={() => setOpenModal(!openModal)}>
           <Icon
@@ -145,10 +145,7 @@ const UserActivityDetails = ({ route }: any) => {
       <OptionsModal
         openModal={openModal}
         setOpenModal={setOpenModal}
-        actionId={activity._id}
-        collectorStatus={activity!.CollectorStatus}
-        completionStatus={activity!.CompletionStatus}
-        phoneNumber={activity?.phoneNumber}
+        activity={activity}
       />
     </View>
   );

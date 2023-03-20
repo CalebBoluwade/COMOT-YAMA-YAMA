@@ -1,11 +1,17 @@
 import { StyleSheet, Appearance, Dimensions } from "react-native";
-import {useEffect, useState} from 'react';
-import { useColorScheme, View } from 'react-native';
+import { useEffect, useState } from "react";
+import { useColorScheme, View } from "react-native";
 import { AnyAction } from "@reduxjs/toolkit";
 
 let { width, height } = Dimensions.get("screen");
 
 const darkMode = Appearance.getColorScheme() === "dark";
+
+// const horizontalScale = (size: number) => (width / guidelineBaseWidth) * size;
+
+// const verticalScale = (size: number) => (height / guidelineBaseHeight) * size;
+
+// const modScale = (size: number, factor = 0.5) => size + (horizontalScale(size) - size) * factor;
 
 export const AppTheme = () => {
   // const [darcMode, setdarcMode] = useState<any>()
@@ -14,11 +20,10 @@ export const AppTheme = () => {
   // });
 
   // const colorScheme = useColorScheme();
-  useEffect(() => {
-  }, [darkMode])
+  useEffect(() => {}, [darkMode]);
 
-  return null
-}
+  return null;
+};
 
 export const PaletteStyles = StyleSheet.create({
   Width: {
@@ -53,7 +58,7 @@ export const PaletteStyles = StyleSheet.create({
     },
     shadowColor: darkMode ? "#FFF" : "#000",
     // marginTop: 25,
-    overflow: "scroll"
+    overflow: "scroll",
   },
 
   styleBottomContainer: {
@@ -67,9 +72,8 @@ export const PaletteStyles = StyleSheet.create({
       height: -13,
     },
     shadowColor: darkMode ? "#FFF" : "#000",
-    overflow: "scroll"
+    overflow: "scroll",
   },
-
 
   gridLayout: {
     flexWrap: "wrap",
@@ -82,7 +86,7 @@ export const PaletteStyles = StyleSheet.create({
     padding: 8,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly"
+    justifyContent: "space-evenly",
   },
   viewBox: {
     marginVertical: 8,
@@ -93,20 +97,20 @@ export const PaletteStyles = StyleSheet.create({
     borderWidth: 2,
     marginBottom: 15,
   },
-  
+
   lgTextBoldx2: {
     fontSize: 30,
     fontWeight: "900",
     letterSpacing: 2,
     color: darkMode ? "#FFF" : "#000",
-    fontFamily: "Poppins-Bold"
+    fontFamily: "Poppins-Bold",
   },
   lgTextBold: {
     fontSize: 25,
     fontWeight: "700",
     letterSpacing: 1,
     color: darkMode ? "#FFF" : "#000",
-    fontFamily: "Poppins-Bold"
+    fontFamily: "Poppins-Bold",
   },
   smTextBold: {
     fontSize: 16,

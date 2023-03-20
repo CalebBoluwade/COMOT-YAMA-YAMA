@@ -38,15 +38,18 @@ export const DisposeRecycleAPI = createApi({
         params: "",
       }),
     }),
-    updateBin: builder.mutation<any, {id: string | undefined, status: string, token: string}>({
-      query: ({id, status, token}) => ({
+    updateBin: builder.mutation<any, {id: string | undefined, status: string, date?: number, address?: any, owner: string, token: string}>({
+      query: ({id, status, token, owner, date, address}) => ({
         url: `/update/bin/${id}`,
         token: token,
         method: "PATCH",
         data: "",
-        body: {status: status},
+        body: {status: status, owner: owner, date: date, address},
         params: "",
       }),
+      transformErrorResponse: ((err) => {
+        console.log(err)
+      })
     }),
   }),
 });

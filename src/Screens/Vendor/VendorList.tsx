@@ -40,14 +40,14 @@ const VendorList = ({ route, navigation }: any) => {
       </View>
 
       <SelectList
-        setSelected={(val: any) => setSelected(val)}
-        data={vendorData.map((vendor) =>
-          vendor.companyName.toLocaleUpperCase()
+        setSelected={(val: string) => setSelected(val)}
+        data={vendorData?.map((vendor) =>
+          vendor.companyName?.toLocaleUpperCase()
         )}
-        save="value"
-        search={true}
+        // save="value"
+        search={false}
         onSelect={() => alert(selected)}
-        placeholder="Select Vendor"
+        placeholder="Search Vendors"
         boxStyles={{
           backgroundColor: PaletteStyles.darkMode.color,
           marginTop: PaletteStyles.vSpacing.marginVertical,
@@ -55,6 +55,8 @@ const VendorList = ({ route, navigation }: any) => {
           borderColor: PaletteStyles.colorScheme1.color,
           alignSelf: "center",
           width: PaletteStyles.Width.width / 1.1,
+          zIndex: 5,
+          elevation: 5
         }}
         dropdownStyles={{
           backgroundColor: PaletteStyles.darkMode.color,
@@ -64,8 +66,10 @@ const VendorList = ({ route, navigation }: any) => {
           right: 0,
           top: 55,
           width: PaletteStyles.Width.width / 1.1,
-          zIndex: 5
+          zIndex: 10,
+          elevation: 5
         }}
+        searchPlaceholder="Search Vendors"
       />
 
       <View style={{ padding: 12 }}>
@@ -73,6 +77,11 @@ const VendorList = ({ route, navigation }: any) => {
           renderItem={(item) => renderVendorList(item)}
           // estimatedItemSize={20}
           data={vendorData}
+          // scrollEnabled
+          showsVerticalScrollIndicator={false}
+          style={{
+            marginBottom: 120
+          }}
         />
       </View>
     </View>

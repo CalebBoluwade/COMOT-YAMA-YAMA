@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity,
   Modal,
+  ScrollView,
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
@@ -42,13 +43,15 @@ const Profile = ({ navigation }: any) => {
   };
 
   return (
-    <View
+    <ScrollView
+    showsVerticalScrollIndicator={false}
       style={[
         PaletteStyles.container,
         {
           backgroundColor: PaletteStyles.darkMode.backgroundColor,
           padding: 12,
-          paddingTop: 48
+          paddingTop: 48,
+          paddingBottom: 100,
         },
       ]}
     >
@@ -58,7 +61,7 @@ const Profile = ({ navigation }: any) => {
           alignItems: "center",
         }}
       >
-        <GoBack navigation={navigation} />
+        <GoBack />
 
         <View
           style={{
@@ -179,7 +182,7 @@ const Profile = ({ navigation }: any) => {
           <Text style={{ color: "red" }}>Delete Account</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

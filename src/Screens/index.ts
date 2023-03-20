@@ -8,7 +8,7 @@ import History from "./History";
 import ProfileQR from "./User/ProfileQR";
 import Onboarding from "./Auth/Onboarding";
 import Login from "./Auth/Login";
-import VendorLogin from "./Auth/VendorLogin";
+import VendorLogin from "./Vendor/VendorLogin";
 import RegisterUser from "./Auth/RegisterUser";
 import RegisterUserRouting from "./Auth/RegisterUserRouting";
 import UserRouting from "./Auth/UserRouting";

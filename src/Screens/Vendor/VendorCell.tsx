@@ -48,7 +48,7 @@ const VendorCell = ({
             );
             setTimeout(() => {
               navigation.goBack();
-            }, 2000);
+            }, 1000);
           },
         },
       ]

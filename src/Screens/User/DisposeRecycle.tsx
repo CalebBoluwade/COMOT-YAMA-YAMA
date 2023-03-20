@@ -5,6 +5,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Platform,
+  TextInput,
 } from "react-native";
 import React, { useState } from "react";
 import { PaletteStyles } from "../../Style/AppPalette";
@@ -16,8 +17,6 @@ import {
 } from "react-native-google-places-autocomplete";
 import DateTimePicker, {
   DateTimePickerEvent,
-  DateTimePickerAndroid,
-  AndroidNativeProps,
 } from "@react-native-community/datetimepicker";
 import { MultipleSelectList } from "react-native-dropdown-select-list";
 import * as ImagePicker from "expo-image-picker";
@@ -40,8 +39,8 @@ import { AddAddress } from "../../Context/Data/Auth";
 const DisposeRecycle = ({ navigation }: any) => {
   const [mapLocation, setMapLocation] = useState({
     address: "",
-    latitude: 0,
-    longitude: 0,
+    latitude: 1,
+    longitude: 1,
   });
 
   const [pickupDate, setPickupDate] = useState<number>(0);
@@ -138,7 +137,7 @@ const DisposeRecycle = ({ navigation }: any) => {
     } = event;
 
     setPickupDate(Number(timestamp));
-    // console.log(pickupDate);
+    setDisabledDate(!disabledDate)
   };
 
   const pickImage = async () => {
@@ -147,64 +146,69 @@ const DisposeRecycle = ({ navigation }: any) => {
       base64: true,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 0.4,
+      quality: 0.3,
     });
 
     if (!result.canceled) {
       setImageDescription(`data:image/jpeg;base64,${result.assets[0].base64}`);
-    }
+    } else (
+      setImageDescription(null)
+    )
   };
 
   const SubmitBin = () => {
-    // console.log(address, wasteBags, pickupDate, selected);
-
+    // console.log(mapLocation, wasteBags, pickupDate, selected);
     if (
-      !mapLocation.latitude ||
-      !wasteBags ||
-      selected.length < 1 ||
+      mapLocation.latitude &&
+      wasteBags &&
+      selected.length >= 1 &&
       pickupDate
     ) {
-      Dispatch(Inactive({ message: "Fill all required fields" }));
-    } else {
       DisposalBin({
         payload: {
           address: mapLocation,
-          ownerId: userData._id,
-          imageDescription: imageDescription ? imageDescription : null,
-          phoneNumber: userData.phoneNumber,
-          wasteBags: halfBag ? wasteBags + 0.5 : wasteBags,
-          wasteMaterials: selected,
-          vendor: selectedVendor,
-          // pickupDate: Number(pickupDate),
-          pickupDate: Date.now(),
-        },
-        token: accessToken,
-      })
-        .unwrap()
-        .then((data) => {
-          // console.log(data);
-          // setDisposalResponse(true);
-          Dispatch(Active({ message: "Request successful" }));
+            ownerId: userData._id,
+            imageDescription: imageDescription ? imageDescription : null,
+            phoneNumber: userData.phoneNumber,
+            wasteBags: halfBag ? wasteBags + 0.5 : wasteBags,
+            wasteMaterials: selected,
+            vendor: selectedVendor,
+            // pickupDate: Number(pickupDate),
+            pickupDate: Date.now(),
+          },
+          token: accessToken,
         })
-        .catch((err) => {
-          console.log(err);
-          Dispatch(
-            Inactive({
-              message:
-                err?.data[0]?.message ||
-                err.data.message ||
-                "Something went wrong",
-            })
-          );
-        });
+          .unwrap()
+          .then((data) => {
+            // console.log(data);
+            // setDisposalResponse(true);
+            Dispatch(Active({ message: "Request successful" }));
+          })
+          .catch((err) => {
+            console.log(err);
+            Dispatch(
+              Inactive({
+                message:
+                  err?.data[0]?.message ||
+                  err.data.message ||
+                  "Something went wrong",
+              })
+            );
+          });
+        } else if (selected.length < 1) {
+          Dispatch(Inactive({ message: "Select at least one waste material" }));
+        } else if (!pickupDate) {
+          Dispatch(Inactive({ message: "Select a Date" }));
+        } 
+        else {
+      Dispatch(Inactive({ message: "Fill all required fields" }));
     }
   };
 
   return (
     <View
       style={[
-        // PaletteStyles.container,
-        { flex: 1 },
+        PaletteStyles.container,
         {
           backgroundColor: PaletteStyles.darkMode.backgroundColor,
           padding: 18,
@@ -220,7 +224,7 @@ const DisposeRecycle = ({ navigation }: any) => {
           alignItems: "center",
         }}
       >
-        <GoBack navigation={navigation} />
+        <GoBack />
 
         <View>
           <Text style={[PaletteStyles.lgTextBold, PaletteStyles.darkMode]}>
@@ -237,54 +241,132 @@ const DisposeRecycle = ({ navigation }: any) => {
         </View>
       </View>
 
-      <View style={{marginTop: -15, marginBottom: 45}}>
+      <View style={{ marginTop: -15, marginBottom: 15 }}>
         <Label
           title="Address (Pickup location)"
           isRequired={true}
           showRequired={true}
         />
 
-        <GooglePlacesAutocomplete
+        {/* <GooglePlacesAutocomplete
+          placeholder="Address"
           query={{
-            key: "AIzaSyARwk8fNFtc3D-qHecQamjUBMeI0pI5itU",
+            key: "AIzaSyDia3qDtwTkXAyWLbJ45FR9NE4oafJE_RI",
             language: "en",
+            components: "country:ng",
           }}
           styles={{
             textInput: {
               fontSize: 16,
-              // padding: 8,
               borderWidth: 2,
               borderColor: PaletteStyles.colorScheme1.color,
               backgroundColor: "#FFF",
               color: "#000",
             },
             textInputContainer: {
-              // marginVertical: 8,
               borderColor: PaletteStyles.colorScheme1.color,
-              // borderBottomColor: PaletteStyles.colorScheme1.color,
               width: "98%",
               alignSelf: "center",
             },
           }}
           onPress={(data, details = null) => {
-            console.log(data);
-            setMapLocation({
-              address: data.description,
-              latitude: Number(details?.geometry.location.lat),
-              longitude: Number(details?.geometry.location.lng),
-            });
+            console.log(data, details);
+            // setMapLocation({
+            //   address: data.description,
+            //   latitude: Number(details?.geometry.location.lat),
+            //   longitude: Number(details?.geometry.location.lng),
+            // });
+          }}
+          timeout={500}
+          onFail={(error) => {
+            console.error(error);
           }}
           enableHighAccuracyLocation
           fetchDetails={true}
           enablePoweredByContainer
           minLength={3}
-          placeholder="Address"
           nearbyPlacesAPI="GooglePlacesSearch"
+          // currentLocation={true}
+          // currentLocationLabel='Current location'
           debounce={400}
+        /> */}
+
+        <TextInput
+          selectionColor={PaletteStyles.colorScheme1.color}
+          // onFocus={}
+          autoCorrect={false}
+          keyboardType="default"
+          placeholderTextColor={"#CCC"}
+          style={[
+            PaletteStyles.inputField,
+            {
+              width: "95%",
+              fontSize: 16,
+              borderWidth: 2,
+              borderColor: PaletteStyles.colorScheme1.color,
+              backgroundColor: "#FFF",
+              borderRadius: 12,
+              // width: "98%",
+              alignSelf: "center",
+              color: "#000",
+            },
+          ]}
+          placeholder="address"
+          onChangeText={(text) =>
+            setMapLocation({
+              address: text,
+              latitude: 1,
+              longitude: 1,
+            })
+          }
+          // onSubmitEditing={() => {
+          //   setMapLocation({
+          //     address: text,
+          //     latitude: 0,
+          //     longitude: 0,
+          //   })
+          // }
         />
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
+        <View>
+          <Label
+            title="Number of Waste Bags(max. 10)"
+            isRequired={true}
+            showRequired={true}
+          />
+
+          <TextInput
+            selectionColor={PaletteStyles.colorScheme1.color}
+            autoCorrect={false}
+            keyboardType="number-pad"
+            maxLength={2}
+            style={[
+              PaletteStyles.inputField,
+              {
+                width: "40%",
+                borderWidth: 2,
+                borderColor: PaletteStyles.colorScheme1.color,
+                backgroundColor: "#FFF",
+                borderRadius: 12,
+              },
+            ]}
+            placeholder="Waste Bags"
+            placeholderTextColor={"#CCC"}
+            onChangeText={(text) => setWasteBags(Number(text))}
+          />
+
+            <View style={{flexDirection: "row",  alignItems: "center"}}>
+          <Checkbox
+            style={styles.checkbox}
+            value={halfBag}
+            onValueChange={() => setHalfBag(!halfBag)}
+          />
+            <Text style={{color: PaletteStyles.darkMode.color}}>Add Half Disposal Bag</Text>
+            </View>
+        </View>
+
         <TouchableOpacity
           style={[PaletteStyles.button, { marginVertical: 15 }]}
           onPress={() => FetchVendors()}
@@ -312,11 +394,11 @@ const DisposeRecycle = ({ navigation }: any) => {
 
         {/* MATERIALS */}
         <View>
-          {/* <Label
-          title="Select Waste material(s)"
-          isRequired={true}
-          showRequired={true}
-        /> */}
+          <Label
+            title="Select Waste material(s)"
+            isRequired={true}
+            showRequired={true}
+          />
 
           {!materialsData.isLoading ? (
             <MultipleSelectList
@@ -388,32 +470,10 @@ const DisposeRecycle = ({ navigation }: any) => {
           </TouchableOpacity>
         </View>
 
-        {/* <Label
-        title="Specify No. of Waste Bag(s)"
-        isRequired={true}
-        showRequired={true}
-      />
-
-      <TextInput
-        selectionColor={PaletteStyles.colorScheme1.color}
-        autoCorrect={false}
-        keyboardType="number-pad"
-        maxLength={2}
-        style={[
-          PaletteStyles.inputField,
-          {
-            width: "30%",
-            borderWidth: 2,
-            borderColor: PaletteStyles.colorScheme1.color,
-            backgroundColor: "#FFF",
-            borderRadius: 12,
-            marginVertical: 12,
-          },
-        ]}
-        placeholder="Waste Bags"
-        placeholderTextColor={"#CCC"}
-        onChangeText={(text) => setWasteBags(Number(text))}
-      /> */}
+        {/* <DisposalResponse
+          openModal={openDisposalResponse}
+          setOpenModal={setDisposalResponse}
+        /> */}
 
         <View>
           <TouchableOpacity style={[PaletteStyles.button]} onPress={pickImage}>
@@ -443,107 +503,9 @@ const DisposeRecycle = ({ navigation }: any) => {
           <Text style={PaletteStyles.colorScheme1}>Submit Request</Text>
         </TouchableOpacity>
       </ScrollView>
-      {/* <DisposalResponse
-        openModal={openDisposalResponse}
-        setOpenModal={setDisposalResponse}
-      /> */}
     </View>
   );
 };
-
-{
-  /* <View
-style={{
-  flexDirection: "row",
-  alignItems: "center",
-  maxWidth: PaletteStyles.Width.width / 1.1,
-  overflow: "scroll",
-  marginTop: PaletteStyles.vSpacing.marginVertical,
-}}
->
-<Label
-    title="Select Waste material(s)"
-    isRequired={true}
-    showRequired={true}
-  />
-
-<TextInput
-  selectionColor={PaletteStyles.colorScheme1.color}
-  autoCorrect={false}
-  keyboardType="number-pad"
-  maxLength={2}
-  style={[
-    PaletteStyles.inputField,
-    {
-      width: "30%",
-      borderWidth: 2,
-      borderColor: PaletteStyles.colorScheme1.color,
-      backgroundColor: "#FFF",
-      borderRadius: 12,
-    },
-  ]}
-  placeholder="Waste Bags"
-  placeholderTextColor={"#CCC"}
-  onChangeText={(text) => setWasteBags(Number(text))}
-/>
-</View> */
-}
-
-{
-  /* <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          maxWidth: PaletteStyles.Width.width / 1.1,
-          overflow: "scroll",
-          marginTop: PaletteStyles.vSpacing.marginVertical,
-        }}
-      >
-      
-
-      
-      </View> */
-}
-
-// <View
-//       style={{
-//         flexDirection: "row",
-//         alignItems: "center",
-//         // justifyContent: "flex-end",
-//         paddingLeft: 5,
-//         width: "90%",
-//       }}
-//     >
-//       <View
-//         style={{
-//           flexDirection: "row",
-//           alignItems: "center",
-//           justifyContent: "space-between",
-//         }}
-//       >
-//         <Checkbox
-//           style={styles.checkbox}
-//           value={halfBag}
-//           onValueChange={() => setHalfBag(!halfBag)}
-//         />
-
-//         <Text style={PaletteStyles.smTextLight}>Half</Text>
-//       </View>
-
-//       {/* <View
-//         style={{
-//           position: "relative",
-//           left: PaletteStyles.Width.width - 250,
-//         }}
-//       >
-//         <Icon
-//           name="info"
-//           size={20}
-//           type="material"
-//           color={PaletteStyles.colorScheme1.color}
-//         />
-//       </View> */}
-//     </View>
 
 export default DisposeRecycle;
 

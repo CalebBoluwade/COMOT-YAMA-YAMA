@@ -257,7 +257,7 @@ const Initial = ({ navigation }: any) => {
               color={PaletteStyles.colorScheme1.color}
             />
             <Text style={{ color: PaletteStyles.darkMode.color }}>
-              VIEW SCHEDULE
+              VIEW REQUESTS
             </Text>
           </TouchableOpacity>
 
@@ -277,12 +277,10 @@ const Initial = ({ navigation }: any) => {
               color={PaletteStyles.colorScheme1.color}
             />
             <Text style={{ color: PaletteStyles.darkMode.color }}>
-              TRANSACTION HISTORY
+              PAYMENT HISTORY
             </Text>
           </TouchableOpacity>
         </ScrollView>
-
-        <Image source={require("../../assets/Logistics.png")} style={styles.image} resizeMode="contain" />
 
         <View
           style={{
@@ -311,7 +309,9 @@ const Initial = ({ navigation }: any) => {
           ]}
         >
           <Text style={[PaletteStyles.lgTextBold, {width: "90%"}]}>17 MARCH</Text>
-          <Text style={PaletteStyles.smTextLight}>12 Days</Text>
+          <Text style={PaletteStyles.smTextLight}>2 Days</Text>
+
+          <Image source={require("../../assets/Logistics.png")} style={styles.image} resizeMode="contain" />
         </View>
 
         <Text style={[PaletteStyles.smTextBold, { padding: 8 }]}>
@@ -364,6 +364,8 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 225,
     alignSelf: "center",
+    position: "relative",
+    left: 105
   },
 
   slides: {

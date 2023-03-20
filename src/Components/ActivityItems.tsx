@@ -16,11 +16,11 @@ const ActivityItem = ({ data, index, navigation }: any) => {
   const activity: WasteBinData = data;
 
   return (
-    <TouchableOpacity style={[styles.container, PaletteStyles.viewBox]} key={index} onPress={() => navigation.navigate("Stack", {
+    <TouchableOpacity style={[styles.container, PaletteStyles.viewBox, styles.TransactionView, {padding: 8}]} key={index} onPress={() => navigation.navigate("Stack", {
       screen: "ActivityDetails",
       params: data
     })}>
-      <View style={[PaletteStyles.viewBox, styles.TransactionView]}>
+      {/* <View style={[]}> */}
       {/* <View style={styles.imageView}> */}
         {activity?.imageDescription ? (
           <Image
@@ -34,15 +34,15 @@ const ActivityItem = ({ data, index, navigation }: any) => {
       {/* </View> */}
 
       <View>
-        <View>
-          <Text>No. of Bags</Text>
-          <Text>{activity?.wasteBags}</Text>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
+          <Text style={[PaletteStyles.lgTextBold, {color: PaletteStyles.darkMode.backgroundColor}]}>No. of Bags</Text>
+          <Text style={[PaletteStyles.lgTextBoldx2, {color: PaletteStyles.darkMode.backgroundColor, marginRight: 18}]}>{activity?.wasteBags}</Text>
         </View>
 
-        <Text>Date: {activity?.pickupDate}</Text>
+        <Text style={[PaletteStyles.lgTextBold, {color: PaletteStyles.darkMode.backgroundColor}]}>{new Date(activity.pickupDate).toUTCString()}</Text>
       </View>
 
-      </View>
+      {/* </View> */}
     </TouchableOpacity>
   );
 };

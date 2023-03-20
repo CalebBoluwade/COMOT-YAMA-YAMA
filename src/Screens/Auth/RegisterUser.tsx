@@ -6,6 +6,8 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  ScrollView,
+  Keyboard
 } from "react-native";
 import React, { useState } from "react";
 import {PaletteStyles} from "../../Style/AppPalette";
@@ -45,7 +47,7 @@ const RegisterUser = ({ navigation }: any) => {
           Dispatch(Active({ message: "🤩 Successful" }));
         })
         .catch((err) => {
-          Dispatch(Inactive({ message: err?.data?.message || err.data || "Server error" }));
+          Dispatch(Inactive({ message: err?.message || "Server error" }));
         });
     } else {
       Dispatch(Inactive({ message: "Enter a valid code" }));
@@ -53,6 +55,7 @@ const RegisterUser = ({ navigation }: any) => {
   };
 
   const Registration = () => {
+    if (isChecked) {
     Register({
       fullName: first + " " + last,
       email: email.toLowerCase(),
@@ -65,11 +68,18 @@ const RegisterUser = ({ navigation }: any) => {
       .then((data) => {
         // Dispatch(Loginn(data?.existingUser));
         Dispatch(Active({ message: "Sucessful" }));
-        navigation.navigate("Login")
+        navigation.navigate("Login");
       })
       .catch((err) => {
-        Dispatch(Inactive({ message: err?.data[0]?.message || err.data || "Server error" }));
+        Dispatch(Inactive({ message: err?.data?.message || "Server error" }));
       });
+    } else {
+      Dispatch(
+        Inactive({
+          message: "Accept T & C's",
+        })
+      );
+    }
   };
 
   return (
@@ -88,12 +98,15 @@ const RegisterUser = ({ navigation }: any) => {
         </Text>
       </View>
 
-      <KeyboardAvoidingView
+      {/* <KeyboardAvoidingView
       keyboardVerticalOffset={50}
         behavior={"position"}
         enabled
+      > */}
+        <ScrollView
         style={[PaletteStyles.styleContainer, {paddingTop: 10, overflow: "scroll"}]}
-      >
+        >
+
 
         <View
           style={{
@@ -217,15 +230,15 @@ const RegisterUser = ({ navigation }: any) => {
           <TextInput
             selectionColor={PaletteStyles.colorScheme1.color}
             autoCorrect={false}
-            keyboardType="phone-pad"
+            keyboardType="numeric"
             placeholderTextColor={"#CCC"}
             style={PaletteStyles.inputField}
-            placeholder="802 3456 789"
+            placeholder="0802 345 6789"
             onChangeText={(text) => setPhoneNumber(text)}
           />
         </View>
 
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             alignItems: "center",
@@ -265,7 +278,7 @@ const RegisterUser = ({ navigation }: any) => {
           >
             <Text>VERIFY</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
         <View
           style={{ flexDirection: "row", alignItems: "center", width: "100%" }}
@@ -333,7 +346,10 @@ const RegisterUser = ({ navigation }: any) => {
             Sign Up
           </Text>
         </TouchableOpacity>
-      </KeyboardAvoidingView>
+
+      {/* </KeyboardAvoidingView> */}
+      </ScrollView>
+
 
       {/* <TouchableOpacity>
         <Text style={[PaletteStyles.colorScheme1, PaletteStyles.lgTextBold]}>
