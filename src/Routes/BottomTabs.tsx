@@ -11,7 +11,6 @@ import {
   ActivityPage
 } from "../Screens/index";
 import { Icon } from "react-native-elements";
-let { width, height } = Dimensions.get("screen");
 import { PaletteStyles } from "../Style/AppPalette";
 import { Dimensions } from "react-native";
 import StackNav from "./Stack";

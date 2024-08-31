@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {FC, useEffect} from "react";
 import { useServerStatusQuery } from "../Context/API/AUTH_API";
 import { initData } from "../Context/Data/Server";
 import BottomTabs from "./BottomTabs";
@@ -9,7 +9,7 @@ import Response from "../Components/Response";
 import * as Location from "expo-location";
 import { Inactive } from "../Context/Data/Server";
 
-const CombinedRoutes: Function = () => {
+const CombinedRoutes: FC = () => {
   const { data, isLoading, isError } = useServerStatusQuery();
   const { isUserAuth, userData } = useSelector(
     (state: RootState) => state.UserData
